@@ -8,43 +8,60 @@
 import Foundation
 import MaterialComponents
 import UIKit
+protocol MuseumCardDelegate:AnyObject {
+    func hotelCardTapped(title:String,image:UIImage,subtitle:String,phone:String,price:Float)
+}
 
 class MuseumsCardView: MDCCardCollectionCell {
-    
-     let imageCard: UIImageView = {
+    weak var delegate: MuseumCardDelegate?
+    var price: Float!
+     lazy var imageCard: UIImageView = {
         var image = UIImageView()
         //image.image = UIImage(named: "hotelTerelidis")
         image.contentMode = .scaleAspectFill
        // image.backgroundColor = .yellow
         image.clipsToBounds = true
+        image.layer.cornerRadius = 15
         image.setContentHuggingPriority(.defaultLow, for: .vertical)
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
-    let cardButton: UIButton = {
-        let button = UIButton()
+    let cardButton: MDCButton = {
+        let button = MDCButton()
         button.backgroundColor = UIColor().hexStringToUIColor(hex:"#457b9d")
-        button.layer.cornerRadius = 18
+        button.layer.cornerRadius = 20
+        button.layer.shadowRadius = 15
+        button.clipsToBounds = true
+        button.addTarget(self, action: #selector(cardButtonTouchUpInsideHandler(_:)), for: .touchUpInside)
         button.setTitle("Visit", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
+    
+    @objc func cardButtonTouchUpInsideHandler(_ sender: MDCButton) {
+        print(labelCard.text!)
+        print(price!)
+        delegate?.hotelCardTapped(title: labelCard.text!,image: imageCard.image!,subtitle: subLabel.text!,phone: phone.text!,price:price)
+        
+    }
+    
      let labelCard: UILabel = {
         var label = UILabel()
-        label.backgroundColor = .green
+        label.backgroundColor = .clear
+        label.sizeToFit()
        // label.text = "Customsfdsfsdsfddfddfdfsfsdfdsffsdfdsfsfdfsdfsdfdsfdsfdfsfsdfsdfsdfsfdsfdssfdssdfsdf"
-        label.textAlignment = .center
+         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.font = UIFont(name: "Helvetica", size: 16)
+        label.font = UIFont(name: "HelveticaNeue-Light", size: 24)
         label.setContentHuggingPriority(.defaultHigh, for: .vertical)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     let subLabel: UILabel = {
        var label = UILabel()
-        label.backgroundColor = .clear
+       label.backgroundColor = .clear
        label.textAlignment = .left
        label.numberOfLines = 0
        label.lineBreakMode = .byWordWrapping
@@ -54,18 +71,54 @@ class MuseumsCardView: MDCCardCollectionCell {
        return label
    }()
     
+    lazy var addressIcon: UIImageView = {
+        let imageView = UIImageView(image: #imageLiteral(resourceName: "location_x20"))
+        imageView.tintColor = .black
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    let phone: UILabel = {
+       var label = UILabel()
+       label.backgroundColor = .clear
+       label.textAlignment = .left
+       label.numberOfLines = 0
+       label.lineBreakMode = .byWordWrapping
+       label.font = UIFont(name: "Helvetica", size: 16)
+       label.setContentHuggingPriority(.defaultHigh, for: .vertical)
+       label.translatesAutoresizingMaskIntoConstraints = false
+       return label
+   }()
+    //UIImageView(image: #imageLiteral(resourceName: "phone_x20"))
+    lazy var phoneIcon: UIImageView = {
+        let imageView = UIImageView(image: #imageLiteral(resourceName: "phone_x20"))
+        imageView.tintColor = .black
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    lazy var phoneStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [phoneIcon,phone])
+         stackView.axis = .horizontal
+         stackView.spacing = 5.0
+         stackView.translatesAutoresizingMaskIntoConstraints = false
+         return stackView
+     }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.layer.shadowOpacity = 0.8
         self.addSubview(contentView)
         contentView.addSubview(imageCard)
         contentView.addSubview(labelCard)
         contentView.addSubview(cardButton)
+        contentView.addSubview(addressIcon)
         contentView.addSubview(subLabel)
+        contentView.addSubview(phoneStackView)
         contentView.clipsToBounds = true
         contentView.backgroundColor = UIColor().hexStringToUIColor(hex: "#a8dadc")
+        contentView.sizeToFit()
         contentView.translatesAutoresizingMaskIntoConstraints = false
-        
     }
     
     override func layoutSubviews() {
@@ -82,12 +135,22 @@ class MuseumsCardView: MDCCardCollectionCell {
         imageCard.widthAnchor.constraint(equalTo: contentView.widthAnchor ).isActive = true
         //imageCard.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         labelCard.topAnchor.constraint(equalTo: imageCard.bottomAnchor,constant: 20).isActive = true
-        labelCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,constant: 30).isActive = true
-        labelCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,constant: -30).isActive = true
+        labelCard.leadingAnchor.constraint(equalTo: imageCard.leadingAnchor,constant: 20).isActive = true
+        labelCard.trailingAnchor.constraint(equalTo: imageCard.trailingAnchor,constant: -30).isActive = true
         
-        subLabel.topAnchor.constraint(equalTo: labelCard.bottomAnchor, constant: 20).isActive = true
-        subLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,constant: 30).isActive = true
-        subLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,constant: -30).isActive = true
+        addressIcon.topAnchor.constraint(equalTo: labelCard.bottomAnchor,constant: 10).isActive = true
+        addressIcon.leadingAnchor.constraint(equalTo: labelCard.leadingAnchor).isActive = true
+        
+        subLabel.topAnchor.constraint(equalTo: addressIcon.topAnchor).isActive = true
+        subLabel.leadingAnchor.constraint(equalTo: addressIcon.leadingAnchor,constant: 25).isActive = true
+        subLabel.trailingAnchor.constraint(equalTo: labelCard.trailingAnchor).isActive = true
+        
+        phoneStackView.topAnchor.constraint(equalTo: addressIcon.bottomAnchor,constant: 30).isActive = true
+        phoneStackView.leadingAnchor.constraint(equalTo: addressIcon.leadingAnchor).isActive = true
+        
+//        cardStackView.topAnchor.constraint(equalTo:  addressIcon.topAnchor).isActive = true
+//        cardStackView.leadingAnchor.constraint(equalTo:  addressIcon.leadingAnchor).isActive = true
+//        cardStackView.trailingAnchor.constraint(equalTo:  labelCard.trailingAnchor).isActive = true
         
         cardButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20).isActive = true
         cardButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30).isActive = true
@@ -107,8 +170,15 @@ class MuseumsCardView: MDCCardCollectionCell {
     public func configure(label: String){
         labelCard.text = label
     }
+    public func configure(priceL: Float){
+        price = priceL
+    }
     public func configure(labelSub: String){
         subLabel.text = labelSub
+    }
+    
+    public func configure(phoneLabel: String){
+        phone.text = phoneLabel
     }
     
     public func configure(with image: UIImage){

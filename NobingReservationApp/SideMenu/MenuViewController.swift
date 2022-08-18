@@ -38,7 +38,7 @@ enum SideMenuItem: String,CaseIterable {
                 case .about:
                     return "contact_x20"
                 case .contact:
-                    return "contact_x20"
+                    return "email_x20"
             }
         }
 }
