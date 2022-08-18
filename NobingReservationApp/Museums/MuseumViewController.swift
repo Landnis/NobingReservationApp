@@ -9,10 +9,11 @@ import UIKit
 import MaterialComponents
 import MaterialComponents.MDCActionSheetController
 import MaterialComponents.MDCActionSheetController_MaterialTheming
+
 class MuseumViewController: UIViewController,AlertController{
-    
+
     private var collectionView: UICollectionView?
-    
+ 
     var topbar: TopBarView = {
         let topbar = TopBarView()
         topbar.translatesAutoresizingMaskIntoConstraints = false
@@ -65,29 +66,41 @@ class MuseumViewController: UIViewController,AlertController{
 }
 extension MuseumViewController: UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 30
+        return data.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! MuseumsCardView
         let Museums = data
-        cell.configure(label: "\(Museums[2].title!)")
-        cell.configure(with: (Museums[0].image)!)
-        cell.configure(labelSub: "Address: \(Museums[0].subTitle!)")
+        cell.configure(label: "\(Museums[indexPath.row].title!)")
+        cell.configure(with: Museums[indexPath.row].image!)
+        cell.configure(phoneLabel: ": "+Museums[indexPath.row].phone!)
+        cell.configure(labelSub:  ": "+Museums[indexPath.row].subTitle!)
+        cell.configure(priceL: Museums[indexPath.row].price! )
+        cell.delegate = self
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("Select section \(indexPath.section) and row \(indexPath.row)")
+        let Museums = data
+        let vc = selectCardView()
+        self.navigationController?.pushViewController(selectCardView(), animated: true)
+        self.modalPresentationStyle = .formSheet
+        vc.hotel_title = Museums[indexPath.item].title!
+        vc.img.image = Museums[indexPath.item].image!
+        vc.address_title = ": "+Museums[indexPath.item].subTitle!
+        vc.phone_label = ": "+Museums[indexPath.item].phone!
+        vc.price_label = ": \(Museums[indexPath.item].price!)€ per day"
+        present(vc, animated: true)
     }
+  
 }
 
 extension MuseumViewController: TopBarViewDelegate {
     func tappedMenu() {
         print("Hello")
     }
-    
-    
     func logoutAlert() {
         let viewController = LoginViewController()
         viewController.modalTransitionStyle = .crossDissolve
@@ -100,14 +113,22 @@ extension MuseumViewController: TopBarViewDelegate {
                                              handler: { _ in self.present(viewController, animated: true)})
         actionSheet.addAction(actionOne)
         present(actionSheet, animated: true, completion: nil)
-///UIAlert with actionSheet example
-//        let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
-//        let logoutAction = UIAlertAction(title: "Logout", style: .default,handler: {(action) in self.present(viewController,animated: true)})
-//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-//        optionMenu.addAction(logoutAction)
-//        optionMenu.addAction(cancelAction)
-//        self.present(optionMenu, animated: true, completion: nil)
     }
     
 }
-
+extension MuseumViewController:MuseumCardDelegate {
+    func hotelCardTapped(title:String,image:UIImage,subtitle:String,phone:String,price:Float) {
+        print(title)
+        let vc = selectCardView()
+        self.navigationController?.pushViewController(vc, animated: true)
+        self.modalPresentationStyle = .formSheet
+        vc.hotel_title = title
+        vc.img.image = image
+        vc.address_title = subtitle
+        vc.phone_label = phone
+        vc.price_label = ": \(price)€ per day"
+        present(vc, animated: true)
+    }
+    
+ 
+}

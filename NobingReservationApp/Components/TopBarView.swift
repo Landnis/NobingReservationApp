@@ -53,7 +53,7 @@ class TopBarView: UIView{
     
     let menuButton: MDCButton = {
         let button = MDCButton()
-        button.setImage(#imageLiteral(resourceName: "logout_x20").withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(#imageLiteral(resourceName: "menu_x20").withRenderingMode(.alwaysTemplate), for: .normal)
         button.backgroundColor = UIColor().hexStringToUIColor(hex: "#f5ebe0")
         button.tintColor = .black
         button.addTarget(self, action: #selector(menuButtonTouchUpInsideHandler(_:)), for: .touchUpInside)

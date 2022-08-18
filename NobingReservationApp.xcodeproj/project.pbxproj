@@ -18,14 +18,15 @@
 		CF20E5D328980D9F004AF54F /* TopBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF20E5D228980D9F004AF54F /* TopBarView.swift */; };
 		CF21CC1828990C37005291E3 /* MuseumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF21CC1728990C37005291E3 /* MuseumViewController.swift */; };
 		CF21CC1B28990E7F005291E3 /* MuseumsCardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF21CC1A28990E7F005291E3 /* MuseumsCardsView.swift */; };
-		CF21CC1D28994D94005291E3 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF21CC1C28994D94005291E3 /* Models.swift */; };
+		CF21CC1D28994D94005291E3 /* hotelModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF21CC1C28994D94005291E3 /* hotelModels.swift */; };
 		CF4C260E289A9607008F291C /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C260D289A9607008F291C /* MenuViewController.swift */; };
 		CF4C2613289AA460008F291C /* HotelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C2612289AA460008F291C /* HotelsViewController.swift */; };
 		CF4C2615289AA480008F291C /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C2614289AA47F008F291C /* InfoViewController.swift */; };
 		CF4C2617289AA55B008F291C /* CarRentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C2616289AA55B008F291C /* CarRentViewController.swift */; };
 		CF4C2619289AA57A008F291C /* RestaurantsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C2618289AA57A008F291C /* RestaurantsViewController.swift */; };
-		CF4C261B289AA59C008F291C /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C261A289AA59C008F291C /* AboutViewController.swift */; };
+		CF5A6F5528ACF03F008F56C5 /* selectCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5A6F5428ACF03F008F56C5 /* selectCardView.swift */; };
 		CFA33D81289BC8CF007DA0B5 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA33D80289BC8CF007DA0B5 /* ContactViewController.swift */; };
+		CFB6684628AE83DD004BB619 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB6684528AE83DD004BB619 /* AboutViewController.swift */; };
 		E4FF5129B31DA75D0C0901F4 /* Pods_NobingReservationApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46AD8BE517333C8ACE83899C /* Pods_NobingReservationApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -46,14 +47,15 @@
 		CF20E5D228980D9F004AF54F /* TopBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarView.swift; sourceTree = "<group>"; };
 		CF21CC1728990C37005291E3 /* MuseumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuseumViewController.swift; sourceTree = "<group>"; };
 		CF21CC1A28990E7F005291E3 /* MuseumsCardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuseumsCardsView.swift; sourceTree = "<group>"; };
-		CF21CC1C28994D94005291E3 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		CF21CC1C28994D94005291E3 /* hotelModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hotelModels.swift; sourceTree = "<group>"; };
 		CF4C260D289A9607008F291C /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		CF4C2612289AA460008F291C /* HotelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotelsViewController.swift; sourceTree = "<group>"; };
 		CF4C2614289AA47F008F291C /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		CF4C2616289AA55B008F291C /* CarRentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarRentViewController.swift; sourceTree = "<group>"; };
 		CF4C2618289AA57A008F291C /* RestaurantsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantsViewController.swift; sourceTree = "<group>"; };
-		CF4C261A289AA59C008F291C /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		CF5A6F5428ACF03F008F56C5 /* selectCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = selectCardView.swift; sourceTree = "<group>"; };
 		CFA33D80289BC8CF007DA0B5 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
+		CFB6684528AE83DD004BB619 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,12 +108,13 @@
 		CF20E5B32897AE4A004AF54F /* NobingReservationApp */ = {
 			isa = PBXGroup;
 			children = (
+				CFB6684428AE83CA004BB619 /* About */,
 				CFA33D7F289BC8A8007DA0B5 /* Contact */,
 				CF20E5B42897AE4A004AF54F /* AppDelegate.swift */,
 				CF20E5B82897AE4A004AF54F /* ViewController.swift */,
-				CF21CC1C28994D94005291E3 /* Models.swift */,
+				CF21CC1C28994D94005291E3 /* hotelModels.swift */,
+				CF5A6F5428ACF03F008F56C5 /* selectCardView.swift */,
 				CF4C260F289A9659008F291C /* SideMenu */,
-				CF4C260B289A93F9008F291C /* About */,
 				CF4C260A289A93F1008F291C /* Restaurants */,
 				CF4C2609289A93EB008F291C /* Info */,
 				CF4C2608289A93E1008F291C /* Museums */,
@@ -201,14 +204,6 @@
 			path = Restaurants;
 			sourceTree = "<group>";
 		};
-		CF4C260B289A93F9008F291C /* About */ = {
-			isa = PBXGroup;
-			children = (
-				CF4C261A289AA59C008F291C /* AboutViewController.swift */,
-			);
-			path = About;
-			sourceTree = "<group>";
-		};
 		CF4C260F289A9659008F291C /* SideMenu */ = {
 			isa = PBXGroup;
 			children = (
@@ -224,6 +219,14 @@
 				CFA33D80289BC8CF007DA0B5 /* ContactViewController.swift */,
 			);
 			path = Contact;
+			sourceTree = "<group>";
+		};
+		CFB6684428AE83CA004BB619 /* About */ = {
+			isa = PBXGroup;
+			children = (
+				CFB6684528AE83DD004BB619 /* AboutViewController.swift */,
+			);
+			path = About;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -349,14 +352,15 @@
 				CF4C2619289AA57A008F291C /* RestaurantsViewController.swift in Sources */,
 				CF4C260E289A9607008F291C /* MenuViewController.swift in Sources */,
 				CF20E5B92897AE4A004AF54F /* ViewController.swift in Sources */,
-				CF4C261B289AA59C008F291C /* AboutViewController.swift in Sources */,
+				CFB6684628AE83DD004BB619 /* AboutViewController.swift in Sources */,
+				CF5A6F5528ACF03F008F56C5 /* selectCardView.swift in Sources */,
 				CF21CC1B28990E7F005291E3 /* MuseumsCardsView.swift in Sources */,
 				CF20E5D328980D9F004AF54F /* TopBarView.swift in Sources */,
 				CF20E5C92897B1D0004AF54F /* colorPaletteHex.swift in Sources */,
 				CF4C2615289AA480008F291C /* InfoViewController.swift in Sources */,
 				CF20E5B52897AE4A004AF54F /* AppDelegate.swift in Sources */,
 				CF4C2613289AA460008F291C /* HotelsViewController.swift in Sources */,
-				CF21CC1D28994D94005291E3 /* Models.swift in Sources */,
+				CF21CC1D28994D94005291E3 /* hotelModels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
