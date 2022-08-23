@@ -25,8 +25,10 @@
 		CF4C2617289AA55B008F291C /* CarRentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C2616289AA55B008F291C /* CarRentViewController.swift */; };
 		CF4C2619289AA57A008F291C /* RestaurantsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C2618289AA57A008F291C /* RestaurantsViewController.swift */; };
 		CF5A6F5528ACF03F008F56C5 /* selectCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5A6F5428ACF03F008F56C5 /* selectCardView.swift */; };
+		CF8A154328B37C740020525E /* SelectedCardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8A154228B37C740020525E /* SelectedCardTableView.swift */; };
 		CFA33D81289BC8CF007DA0B5 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA33D80289BC8CF007DA0B5 /* ContactViewController.swift */; };
 		CFB6684628AE83DD004BB619 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB6684528AE83DD004BB619 /* AboutViewController.swift */; };
+		CFCEA80E28AF6D8F0072A7CA /* museumsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCEA80D28AF6D8E0072A7CA /* museumsModel.swift */; };
 		E4FF5129B31DA75D0C0901F4 /* Pods_NobingReservationApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46AD8BE517333C8ACE83899C /* Pods_NobingReservationApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -54,8 +56,10 @@
 		CF4C2616289AA55B008F291C /* CarRentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarRentViewController.swift; sourceTree = "<group>"; };
 		CF4C2618289AA57A008F291C /* RestaurantsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantsViewController.swift; sourceTree = "<group>"; };
 		CF5A6F5428ACF03F008F56C5 /* selectCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = selectCardView.swift; sourceTree = "<group>"; };
+		CF8A154228B37C740020525E /* SelectedCardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedCardTableView.swift; sourceTree = "<group>"; };
 		CFA33D80289BC8CF007DA0B5 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		CFB6684528AE83DD004BB619 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		CFCEA80D28AF6D8E0072A7CA /* museumsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = museumsModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,12 +112,13 @@
 		CF20E5B32897AE4A004AF54F /* NobingReservationApp */ = {
 			isa = PBXGroup;
 			children = (
-				CFB6684428AE83CA004BB619 /* About */,
-				CFA33D7F289BC8A8007DA0B5 /* Contact */,
 				CF20E5B42897AE4A004AF54F /* AppDelegate.swift */,
 				CF20E5B82897AE4A004AF54F /* ViewController.swift */,
 				CF21CC1C28994D94005291E3 /* hotelModels.swift */,
-				CF5A6F5428ACF03F008F56C5 /* selectCardView.swift */,
+				CFCEA80D28AF6D8E0072A7CA /* museumsModel.swift */,
+				CFA33D7F289BC8A8007DA0B5 /* Contact */,
+				CF8A154128B37C060020525E /* selectedCard */,
+				CFB6684428AE83CA004BB619 /* About */,
 				CF4C260F289A9659008F291C /* SideMenu */,
 				CF4C260A289A93F1008F291C /* Restaurants */,
 				CF4C2609289A93EB008F291C /* Info */,
@@ -211,6 +216,15 @@
 				CF4C260D289A9607008F291C /* MenuViewController.swift */,
 			);
 			path = SideMenu;
+			sourceTree = "<group>";
+		};
+		CF8A154128B37C060020525E /* selectedCard */ = {
+			isa = PBXGroup;
+			children = (
+				CF5A6F5428ACF03F008F56C5 /* selectCardView.swift */,
+				CF8A154228B37C740020525E /* SelectedCardTableView.swift */,
+			);
+			path = selectedCard;
 			sourceTree = "<group>";
 		};
 		CFA33D7F289BC8A8007DA0B5 /* Contact */ = {
@@ -345,6 +359,7 @@
 			files = (
 				CF21CC1828990C37005291E3 /* MuseumViewController.swift in Sources */,
 				CF20E5CF28980099004AF54F /* AlertController.swift in Sources */,
+				CF8A154328B37C740020525E /* SelectedCardTableView.swift in Sources */,
 				CF20E5CD2897FB10004AF54F /* HomeViewController.swift in Sources */,
 				CFA33D81289BC8CF007DA0B5 /* ContactViewController.swift in Sources */,
 				CF4C2617289AA55B008F291C /* CarRentViewController.swift in Sources */,
@@ -355,6 +370,7 @@
 				CFB6684628AE83DD004BB619 /* AboutViewController.swift in Sources */,
 				CF5A6F5528ACF03F008F56C5 /* selectCardView.swift in Sources */,
 				CF21CC1B28990E7F005291E3 /* MuseumsCardsView.swift in Sources */,
+				CFCEA80E28AF6D8F0072A7CA /* museumsModel.swift in Sources */,
 				CF20E5D328980D9F004AF54F /* TopBarView.swift in Sources */,
 				CF20E5C92897B1D0004AF54F /* colorPaletteHex.swift in Sources */,
 				CF4C2615289AA480008F291C /* InfoViewController.swift in Sources */,
