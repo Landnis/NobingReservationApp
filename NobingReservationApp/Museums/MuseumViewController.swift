@@ -27,9 +27,6 @@ class MuseumViewController: UIViewController,AlertController{
         view.backgroundColor = UIColor().hexStringToUIColor(hex: "#f5ebe0")
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        //layout.estimatedItemSize = CGSize(width: view.frame.size.width, height: 500)
-        //layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        //layout.itemSize = CGSize(width: view.frame.size.width, height: 500)
         collectionView = UICollectionView(frame: .zero,collectionViewLayout: layout)
         guard let collectionView = collectionView else {
             return
@@ -89,6 +86,7 @@ extension MuseumViewController: UICollectionViewDataSource,UICollectionViewDeleg
         self.modalPresentationStyle = .formSheet
         vc.hotel_title = Museums[indexPath.item].title!
         vc.img.image = Museums[indexPath.item].image!
+        //vc.img.image = Hotels[indexPath.row].images!
         vc.address_title = ": "+Museums[indexPath.item].subTitle!
         vc.phone_label = ": "+Museums[indexPath.item].phone!
         vc.price_label = ": \(Museums[indexPath.item].price!)€ per day"

@@ -8,14 +8,20 @@
 import Foundation
 import UIKit
 import MaterialComponents
+import ImageSlideshow
+import Sentry
 
 class selectCardView: UIViewController {
-   
+    
     var img = UIImageView()
     var hotel_title:String = ""
     var address_title:String = ""
     var phone_label:String = ""
     var price_label:String = ""
+    var collectionView: UICollectionView!
+    var imageTitle = dataImages.map({$0.title})
+    var imagesNames = dataImages.map({$0.images})
+    var carousel = data.map({$0.image})
     
     var selectedCard: UIView = {
         let card = UIView()
@@ -148,21 +154,73 @@ class selectCardView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor().hexStringToUIColor(hex: "#457b9d")
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        collectionView = UICollectionView(frame: .zero,collectionViewLayout: layout)
+        guard let collectionView = collectionView else {
+            return
+        }
+        collectionView.register(SelectedCardTableView.self, forCellWithReuseIdentifier: "cell")
+        layout.itemSize = CGSize(width: 350, height: 200)
+        layout.minimumInteritemSpacing = 30.0
+        layout.minimumLineSpacing = 30.0
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.backgroundColor = UIColor().hexStringToUIColor(hex: "#BED3F3")
         view.addSubview(selectedCard)
         view.addSubview(closeButton)
-        selectedCard.addSubview(Image)
+        //selectedCard.addSubview(Image)
         selectedCard.addSubview(titleLabel)
         selectedCard.addSubview(addressIcon)
         selectedCard.addSubview(addressLabel)
         selectedCard.addSubview(cardStackView)
+        selectedCard.addSubview(collectionView)
         constraintLayout()
         titleLabel.text = hotel_title
-        Image.image = img.image
+        //Image.image = img.image
         addressLabel.text = address_title
         phoneLabel.text = phone_label
         priceLabel.text = price_label
-       
+   
+//        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
+//        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
+//        leftSwipe.direction = .left
+//        rightSwipe.direction = .right
+//        view.addGestureRecognizer(leftSwipe)
+//        view.addGestureRecognizer(rightSwipe)
     }
+    
+    override func viewDidLayoutSubviews() {
+        print(selectedCard.center.x,selectedCard.center.y,selectedCard.frame.width,selectedCard.frame.size.height)
+        collectionView.frame = CGRect(x: 0, y: 0, width: selectedCard.frame.width, height:200 )
+    }
+//    @objc func handleSwipes(_ gestureRecognizer : UISwipeGestureRecognizer){
+//        //let i = carouselTitle.firstIndex(of: titleLabel.text)!
+//        var i = carousel.firstIndex(of: Image.image)!
+//        print(carousel)
+//            if (gestureRecognizer.direction == .left){
+//                i = i+1
+//                if(i >= carousel.count){
+//                    print("δεν υπαρχουν αλλες φωτο!!")
+//                    i = carousel.count
+//                }else{
+//                    print(i)
+//                    Image.image = carousel[i]
+//                }
+//            }
+//            if(gestureRecognizer.direction == .right){
+//                i = i-1
+//                if( i >= 0 ){
+//                    Image.image = carousel[i]
+//
+//                }else{
+//                    print("Den uparxoun alles fwto")
+//                    i = 0
+//                }
+//            }
+//    }
+
+    
     func constraintLayout() {
         selectedCard.topAnchor.constraint(equalTo: view.topAnchor,constant: 100).isActive = true
         selectedCard.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 20).isActive = true
@@ -171,15 +229,15 @@ class selectCardView: UIViewController {
         closeButton.topAnchor.constraint(equalTo: view.topAnchor,constant: 20).isActive = true
         closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -15).isActive = true
         
-        Image.topAnchor.constraint(equalTo: selectedCard.topAnchor).isActive = true
-        Image.leadingAnchor.constraint(equalTo: selectedCard.leadingAnchor).isActive = true
-        Image.trailingAnchor.constraint(equalTo: selectedCard.trailingAnchor).isActive = true
-        Image.bottomAnchor.constraint(equalTo: selectedCard.centerYAnchor).isActive = true
+//        Image.topAnchor.constraint(equalTo: selectedCard.topAnchor).isActive = true
+//        Image.leadingAnchor.constraint(equalTo: selectedCard.leadingAnchor).isActive = true
+//        Image.trailingAnchor.constraint(equalTo: selectedCard.trailingAnchor).isActive = true
+//        Image.bottomAnchor.constraint(equalTo: selectedCard.centerYAnchor).isActive = true
 
         
-        titleLabel.topAnchor.constraint(equalTo: Image.bottomAnchor,constant: 20).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: Image.leadingAnchor).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: Image.trailingAnchor, constant: -30).isActive = true
+        titleLabel.topAnchor.constraint(equalTo:  collectionView.bottomAnchor,constant: 20).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo:  collectionView.leadingAnchor).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo:  collectionView.trailingAnchor, constant: -30).isActive = true
         
         addressIcon.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,constant: 20).isActive = true
         addressIcon.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor).isActive = true
@@ -191,7 +249,36 @@ class selectCardView: UIViewController {
        cardStackView.topAnchor.constraint(equalTo: addressLabel.bottomAnchor,constant: 15).isActive = true
        cardStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor).isActive = true
        cardStackView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor).isActive = true
-
+        
+       collectionView.topAnchor.constraint(equalTo: selectedCard.topAnchor,constant: 5).isActive = true
+       collectionView.leadingAnchor.constraint(equalTo: selectedCard.leadingAnchor).isActive = true
+       collectionView.trailingAnchor.constraint(equalTo: selectedCard.trailingAnchor).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: selectedCard.centerYAnchor).isActive = true
     }
     
+}
+extension selectCardView: UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        let i = imageTitle.firstIndex(of: titleLabel.text)!
+        return imagesNames[i]!.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! SelectedCardTableView
+        let hotels = dataImages
+        let i = imageTitle.firstIndex(of: titleLabel.text)!
+        print(i)
+        cell.Image.image = hotels[i].images![indexPath.row]
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("Select section \(indexPath.section) and row \(indexPath.row)")
+    
+    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        let width: CGFloat = collectionView.frame.width/1 - 1
+//        return CGSize(width: width, height: width)
+//    }
+  
 }
