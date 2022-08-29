@@ -32,7 +32,7 @@ class MuseumViewController: UIViewController,AlertController{
             return
         }
         collectionView.register(MuseumsCardView.self, forCellWithReuseIdentifier: "cell")
-        layout.itemSize = CGSize(width: view.frame.size.width, height: 500)
+        layout.itemSize = CGSize(width: view.frame.size.width-40.0, height: 500)
         layout.minimumInteritemSpacing = 60
         layout.minimumLineSpacing = 60
         collectionView.delegate = self
@@ -51,9 +51,9 @@ class MuseumViewController: UIViewController,AlertController{
         //topbar.widthAnchor.constraint(equalToConstant: 50).isActive = true
         topbar.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
-        collectionView?.topAnchor.constraint(equalTo: topbar.bottomAnchor,constant: 20).isActive = true
-        collectionView?.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        collectionView?.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        collectionView?.topAnchor.constraint(equalTo: topbar.bottomAnchor).isActive = true
+        collectionView?.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        collectionView?.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         collectionView?.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
    
@@ -63,31 +63,32 @@ class MuseumViewController: UIViewController,AlertController{
 }
 extension MuseumViewController: UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data.count
+        return dataSet.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! MuseumsCardView
-        let Museums = data
+        let Museums = dataSet
         cell.configure(label: "\(Museums[indexPath.row].title!)")
         cell.configure(with: Museums[indexPath.row].image!)
         cell.configure(phoneLabel: ": "+Museums[indexPath.row].phone!)
-        cell.configure(labelSub:  ": "+Museums[indexPath.row].subTitle!)
+        cell.configure(labelSub:  ": "+Museums[indexPath.row].address!)
         cell.configure(priceL: Museums[indexPath.row].price! )
+        cell.layer.cornerRadius = 15
         cell.delegate = self
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("Select section \(indexPath.section) and row \(indexPath.row)")
-        let Museums = data
+        let Museums = dataSet
         let vc = selectCardView()
         self.navigationController?.pushViewController(selectCardView(), animated: true)
         self.modalPresentationStyle = .formSheet
-        vc.hotel_title = Museums[indexPath.item].title!
+        vc.museum_title = Museums[indexPath.item].title!
         vc.img.image = Museums[indexPath.item].image!
         //vc.img.image = Hotels[indexPath.row].images!
-        vc.address_title = ": "+Museums[indexPath.item].subTitle!
+        vc.address_title = ": "+Museums[indexPath.item].address!
         vc.phone_label = ": "+Museums[indexPath.item].phone!
         vc.price_label = ": \(Museums[indexPath.item].price!)€ per day"
         present(vc, animated: true)
@@ -115,14 +116,14 @@ extension MuseumViewController: TopBarViewDelegate {
     
 }
 extension MuseumViewController:MuseumCardDelegate {
-    func hotelCardTapped(title:String,image:UIImage,subtitle:String,phone:String,price:Float) {
+    func museumCardTapped(title:String,image:UIImage,address:String,phone:String,price:Float) {
         print(title)
         let vc = selectCardView()
         self.navigationController?.pushViewController(vc, animated: true)
         self.modalPresentationStyle = .formSheet
-        vc.hotel_title = title
+        vc.museum_title = title
         vc.img.image = image
-        vc.address_title = subtitle
+        vc.address_title = address
         vc.phone_label = phone
         vc.price_label = ": \(price)€ per day"
         present(vc, animated: true)
