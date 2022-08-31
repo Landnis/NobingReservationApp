@@ -57,7 +57,7 @@ class CarRentViewController: UIViewController {
 }
 extension CarRentViewController :TopBarViewDelegate {
     func logoutAlert() {
-        let viewController = LoginViewController()
+        let viewController = TabBarController()
         viewController.modalTransitionStyle = .crossDissolve
         viewController.modalPresentationStyle = .fullScreen
 

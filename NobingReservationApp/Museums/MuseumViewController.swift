@@ -101,7 +101,7 @@ extension MuseumViewController: TopBarViewDelegate {
         print("Hello")
     }
     func logoutAlert() {
-        let viewController = LoginViewController()
+        let viewController = TabBarController()
         viewController.modalTransitionStyle = .crossDissolve
         viewController.modalPresentationStyle = .fullScreen
 
