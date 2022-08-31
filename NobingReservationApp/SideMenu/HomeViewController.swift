@@ -7,7 +7,8 @@
 
 import UIKit
 import SideMenu
-
+import MaterialComponents.MDCActionSheetController
+import MaterialComponents.MDCActionSheetController_MaterialTheming
 class HomeViewController: UIViewController{
     
     private var sideMenu : SideMenuNavigationController?
@@ -95,14 +96,21 @@ class HomeViewController: UIViewController{
 
 }
 extension HomeViewController: TopBarViewDelegate {
-    func logoutAlert() {
-        print("Logout")
-    }
-    
     func tappedMenu() {
-        //animate the menu
-        present(sideMenu!, animated: true)
-        print("Side Menu")
+        print("Hello")
+    }
+    func logoutAlert() {
+        let viewController = TabBarController()
+        viewController.modalTransitionStyle = .crossDissolve
+        viewController.modalPresentationStyle = .fullScreen
+
+        let actionSheet = MDCActionSheetController(title: "Logout",
+                                                   message: "Press Here if you want to logout!")
+        let actionOne = MDCActionSheetAction(title: "Logout",
+                                             image: UIImage(named: "logout_x20"),
+                                             handler: { _ in self.present(viewController, animated: true)})
+        actionSheet.addAction(actionOne)
+        present(actionSheet, animated: true, completion: nil)
     }
 }
 
