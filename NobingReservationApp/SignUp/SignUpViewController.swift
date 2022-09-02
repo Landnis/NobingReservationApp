@@ -11,7 +11,8 @@ class SignUpViewController: UIViewController,AlertController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(signupView)
+        view.addSubview(scrollView)
+        scrollView.addSubview(signupView)
         signupView.delegate = self
         view.backgroundColor = UIColor().hexStringToUIColor(hex: "#f9dcc4")
         viewconstraint()
@@ -28,36 +29,49 @@ class SignUpViewController: UIViewController,AlertController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    lazy var scrollView: UIScrollView = {
+        var view = UIScrollView(frame: .zero)
+        view.backgroundColor = UIColor().hexStringToUIColor(hex: "#f9dcc4")
+        //view.bounces = true
+        //view.contentSize = self.view.bounds.size
+        view.alwaysBounceHorizontal = false
+        view.alwaysBounceVertical = true
+        view.isDirectionalLockEnabled = true
+        view.showsVerticalScrollIndicator = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
     
     func viewconstraint() {
         
+      signupView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor,constant: 25).isActive = true
+      signupView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor).isActive = true
+      signupView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor,constant: -45).isActive = true
+      signupView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor,constant: 20).isActive = true
+      signupView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor).isActive = true
+      signupView.heightAnchor.constraint(equalTo:scrollView.contentLayoutGuide.heightAnchor).isActive = true
+                
+        scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+
         if traitCollection.horizontalSizeClass == .regular &&
             traitCollection.verticalSizeClass == .regular {
-          
-           signupView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
-           signupView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-           signupView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-           signupView.widthAnchor.constraint(equalToConstant: 550).isActive = true
-           signupView.heightAnchor.constraint(equalToConstant: 300).isActive = true
-            
+            signupView.heightAnchor.constraint(equalToConstant: 300).isActive = true
+
         } else if traitCollection.horizontalSizeClass == .regular && traitCollection.verticalSizeClass == .compact ||
                     (traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .compact) {
-            signupView.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
-            signupView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25).isActive = true
-            signupView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25).isActive = true
-            signupView.widthAnchor.constraint(equalToConstant: 450).isActive = true
-            signupView.heightAnchor.constraint(equalToConstant: 400).isActive = true
-
-        }else{
-           signupView.topAnchor.constraint(equalTo: view.topAnchor, constant: 150).isActive = true
-           signupView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-           signupView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-           signupView.widthAnchor.constraint(equalToConstant: 350).isActive = true
-           signupView.heightAnchor.constraint(equalToConstant: 500).isActive = true
             
+            signupView.heightAnchor.constraint(equalToConstant: 400).isActive = true
+            
+        }else{
+            
+            signupView.heightAnchor.constraint(equalToConstant: 500).isActive = true
+
         }
-    }
+}
 }
 
 extension SignUpViewController: SignUpDelegate {
