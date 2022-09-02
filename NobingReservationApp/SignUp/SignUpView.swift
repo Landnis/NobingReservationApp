@@ -95,8 +95,9 @@ class SignUpView : UIView {
           textField.setUnderlineColor(UIColor().hexStringToUIColor(hex: "#495057"), for: .editing)
           textField.setFloatingLabelColor(UIColor().hexStringToUIColor(hex: "#495057"), for: .editing)
           textField.label.text = "Create a Password"
-          textField.textContentType = .password
+          textField.textContentType = .newPassword
           textField.isSecureTextEntry = true
+          textField.autocorrectionType = .no
           textField.leftViewMode = .always
           textField.leftView = UIImageView(image: #imageLiteral(resourceName: "lock_x20").withRenderingMode(.alwaysTemplate))
           textField.leftView?.tintColor = UIColor().hexStringToUIColor(hex: "#495057")
@@ -125,7 +126,8 @@ class SignUpView : UIView {
         textField.setFloatingLabelColor(UIColor().hexStringToUIColor(hex: "#495057"), for: .editing)
         textField.label.text = "Confirm password"
         textField.leadingAssistiveLabel.text = "min. 6 characters, one uppercase, one lowercase, one number and one symbol"
-        textField.textContentType = .password
+        textField.textContentType = .newPassword
+        textField.autocorrectionType = .no
         textField.isSecureTextEntry = true
         textField.leftViewMode = .always
         textField.leftView = UIImageView(image: #imageLiteral(resourceName: "lock_x20").withRenderingMode(.alwaysTemplate))

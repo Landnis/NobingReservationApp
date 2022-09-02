@@ -14,21 +14,30 @@ import MaterialComponents.MaterialButtons
 import MaterialComponents.MaterialButtons_Theming
 import MaterialComponents.MaterialTabs_TabBarView
 class LoginViewController: UIViewController, AlertController{
-       
+
+    //lazy var contentViewSize = CGSize(width: self.view.frame.width, height: self.view.frame.height + 800)
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor().hexStringToUIColor(hex: "#f9dcc4")
-        view.addSubview(loginView)
+        view.addSubview(scrollView)
+        scrollView.addSubview(loginView)
+        
         self.loginView.delegate = self
-
         constraint()
 
     }
     
-    lazy var signup: SignUpView = {
-        let vc = SignUpView()
-        vc.translatesAutoresizingMaskIntoConstraints = false
-        return vc
+    lazy var scrollView: UIScrollView = {
+        var view = UIScrollView(frame: .zero)
+        view.backgroundColor = UIColor().hexStringToUIColor(hex: "#f9dcc4")
+        //view.bounces = true
+        //view.contentSize = self.view.bounds.size
+        view.alwaysBounceHorizontal = false
+        view.alwaysBounceVertical = true
+        view.isDirectionalLockEnabled = true
+        view.showsVerticalScrollIndicator = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
  
     var loginView: LoginView  = {
@@ -43,37 +52,35 @@ class LoginViewController: UIViewController, AlertController{
         return loginView
     }()
     
-    
     func constraint(){
         
+        loginView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor,constant: 25).isActive = true
+        loginView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor).isActive = true
+        loginView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor,constant: -45).isActive = true
+        loginView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor,constant: 20).isActive = true
+        loginView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor).isActive = true
+        loginView.heightAnchor.constraint(equalTo:scrollView.contentLayoutGuide.heightAnchor).isActive = true
+                
+        scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+
         if traitCollection.horizontalSizeClass == .regular &&
             traitCollection.verticalSizeClass == .regular {
-            
-            loginView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
-            loginView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-            loginView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-            loginView.widthAnchor.constraint(equalToConstant: 550).isActive = true
-            loginView.heightAnchor.constraint(equalToConstant: 250).isActive = true
-            
+            loginView.heightAnchor.constraint(equalToConstant: 300).isActive = true
+
         } else if traitCollection.horizontalSizeClass == .regular && traitCollection.verticalSizeClass == .compact ||
                     (traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .compact) {
-            loginView.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
-            loginView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25).isActive = true
-            loginView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25).isActive = true
-            loginView.widthAnchor.constraint(equalToConstant: 450).isActive = true
-            loginView.heightAnchor.constraint(equalToConstant: 350).isActive = true
-
-        }else{
-            loginView.topAnchor.constraint(equalTo: view.topAnchor, constant: 150).isActive = true
-            loginView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-            loginView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-            loginView.widthAnchor.constraint(equalToConstant: 350).isActive = true
-            loginView.heightAnchor.constraint(equalToConstant: 450).isActive = true
             
-        }
-    }
-       
+            loginView.heightAnchor.constraint(equalToConstant: 400).isActive = true
+            
+        }else{
+            
+            loginView.heightAnchor.constraint(equalToConstant: 500).isActive = true
 
+        }
+      }
 }
 
 extension LoginViewController : LoginViewDelegate {
