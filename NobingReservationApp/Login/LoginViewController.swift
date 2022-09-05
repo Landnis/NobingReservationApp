@@ -15,25 +15,21 @@ import MaterialComponents.MaterialButtons_Theming
 import MaterialComponents.MaterialTabs_TabBarView
 class LoginViewController: UIViewController, AlertController{
 
-    //lazy var contentViewSize = CGSize(width: self.view.frame.width, height: self.view.frame.height + 800)
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor().hexStringToUIColor(hex: "#f9dcc4")
-        view.addSubview(scrollView)
-        scrollView.addSubview(loginView)
-        
+        addSubviews(with: traitCollection)
+        constraint(with: traitCollection)
         self.loginView.delegate = self
-        constraint()
-
     }
     
     lazy var scrollView: UIScrollView = {
         var view = UIScrollView(frame: .zero)
         view.backgroundColor = UIColor().hexStringToUIColor(hex: "#f9dcc4")
-        //view.bounces = true
-        //view.contentSize = self.view.bounds.size
-        view.alwaysBounceHorizontal = false
-        view.alwaysBounceVertical = true
+        view.autoresizingMask = .flexibleHeight
+        //view.showsHorizontalScrollIndicator = true
+        view.bounces = true
+        view.contentSize = self.view.bounds.size
         view.isDirectionalLockEnabled = true
         view.showsVerticalScrollIndicator = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -52,35 +48,55 @@ class LoginViewController: UIViewController, AlertController{
         return loginView
     }()
     
-    func constraint(){
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        print("Changed")
+        removeSubviews()
+        addSubviews(with: traitCollection)
+        constraint(with: traitCollection)
+    }
+    func addSubviews(with traitCollection: UITraitCollection){
+        print("add")
+        scrollView.addSubview(loginView)
+        view.addSubview(scrollView)
+    }
+  
+    
+    func constraint(with traitCollection: UITraitCollection){
+       loginView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor,constant: 25).isActive = true
+       loginView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor).isActive = true
+       loginView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor,constant: -45).isActive = true
+       loginView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor,constant: 20).isActive = true
+       loginView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor).isActive = true
+       loginView.heightAnchor.constraint(equalTo:scrollView.contentLayoutGuide.heightAnchor).isActive = true
+                  
+          scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+          scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+          scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+          scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+
+          if traitCollection.horizontalSizeClass == .regular &&
+              traitCollection.verticalSizeClass == .regular {
+             loginView.heightAnchor.constraint(equalToConstant: 700).isActive = true
+              print(loginView.frame.size.height)
+
+          } else if traitCollection.horizontalSizeClass == .regular && traitCollection.verticalSizeClass == .compact ||
+                      (traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .compact) {
+              
+              loginView.heightAnchor.constraint(equalToConstant: 400).isActive = true
+              print(loginView.frame.size.height)
+          }else {
+              
+              loginView.heightAnchor.constraint(equalToConstant: 600).isActive = true
+              print(loginView.frame.size.height)
+          }
         
-        loginView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor,constant: 25).isActive = true
-        loginView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor).isActive = true
-        loginView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor,constant: -45).isActive = true
-        loginView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor,constant: 20).isActive = true
-        loginView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor).isActive = true
-        loginView.heightAnchor.constraint(equalTo:scrollView.contentLayoutGuide.heightAnchor).isActive = true
-                
-        scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-        scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
-        scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-
-        if traitCollection.horizontalSizeClass == .regular &&
-            traitCollection.verticalSizeClass == .regular {
-            loginView.heightAnchor.constraint(equalToConstant: 300).isActive = true
-
-        } else if traitCollection.horizontalSizeClass == .regular && traitCollection.verticalSizeClass == .compact ||
-                    (traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .compact) {
-            
-            loginView.heightAnchor.constraint(equalToConstant: 400).isActive = true
-            
-        }else{
-            
-            loginView.heightAnchor.constraint(equalToConstant: 500).isActive = true
-
-        }
-      }
+    }
+    func removeSubviews() {
+        print("remove")
+        loginView.removeFromSuperview()
+        scrollView.removeFromSuperview()
+    }
 }
 
 extension LoginViewController : LoginViewDelegate {
@@ -103,7 +119,7 @@ extension LoginViewController : LoginViewDelegate {
         }else if password.count < 8 {
             self.presentAlert(title: "Error", message: "Password must be 8 letter and more!!")
         } else{
-            let viewController = HomeViewController()
+            let viewController = BottomBarViewController()
             viewController.modalTransitionStyle = .crossDissolve
             viewController.modalPresentationStyle = .fullScreen
             self.present(viewController, animated: true)
