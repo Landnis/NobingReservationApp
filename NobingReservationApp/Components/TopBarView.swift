@@ -23,10 +23,9 @@ class TopBarView: UIView{
         self.layer.shadowOpacity = 0.8
      
         addSubview(logoutButton)
-        addSubview(menuButton)
+        //addSubview(menuButton)
         addSubview(imageView)
         constraints()
-       // self.translatesAutoresizingMaskIntoConstraints = false
     }
     
     required init?(coder: NSCoder) {
@@ -51,20 +50,20 @@ class TopBarView: UIView{
         return button
     }()
     
-    let menuButton: MDCButton = {
-        let button = MDCButton()
-        button.setImage(#imageLiteral(resourceName: "menu_x20").withRenderingMode(.alwaysTemplate), for: .normal)
-        button.backgroundColor = UIColor().hexStringToUIColor(hex: "#f5ebe0")
-        button.tintColor = .black
-        button.addTarget(self, action: #selector(menuButtonTouchUpInsideHandler(_:)), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+//    let menuButton: MDCButton = {
+//        let button = MDCButton()
+//        button.setImage(#imageLiteral(resourceName: "menu_x20").withRenderingMode(.alwaysTemplate), for: .normal)
+//        button.backgroundColor = UIColor().hexStringToUIColor(hex: "#f5ebe0")
+//        button.tintColor = .black
+//        button.addTarget(self, action: #selector(menuButtonTouchUpInsideHandler(_:)), for: .touchUpInside)
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        return button
+//    }()
     func constraints(){
         logoutButton.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         logoutButton.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        menuButton.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        menuButton.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+//        menuButton.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+//        menuButton.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
         imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         imageView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
 
@@ -73,9 +72,9 @@ class TopBarView: UIView{
     @objc func logoutButtonTouchUpInsideHandler(_ sender: UIButton) {
         delegate?.logoutAlert()
     }
-    @objc func menuButtonTouchUpInsideHandler(_ sender: UIButton) {
-        delegate?.tappedMenu()
-    }
+//    @objc func menuButtonTouchUpInsideHandler(_ sender: UIButton) {
+//        delegate?.tappedMenu()
+//    }
 
 }
 
