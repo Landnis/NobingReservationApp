@@ -34,13 +34,36 @@ class selectCardView: UIViewController {
         card.translatesAutoresizingMaskIntoConstraints = false
         return card
     }()
-    
-    var scrollView: UIScrollView = {
-        var scrollView = UIScrollView()
-        scrollView.backgroundColor = .green
-        scrollView.contentInsetAdjustmentBehavior = .never
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        return scrollView
+
+    lazy var nextIcon: UIImageView = {
+        let imageView = UIImageView(image: #imageLiteral(resourceName: "nextArrow_x20").withTintColor(.lightGray))
+       
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    lazy var previousIcon: UIImageView = {
+        let imageView =  UIImageView(image: #imageLiteral(resourceName: "previousArrow_x20").withTintColor(.lightGray))
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    lazy var nextView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .darkGray
+        view.alpha = 0.50
+        view.layer.cornerRadius = 15
+        view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+            
+    lazy var previousView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .darkGray
+        view.alpha = 0.50
+        view.layer.cornerRadius = 15
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     
@@ -184,22 +207,24 @@ class selectCardView: UIViewController {
             return
         }
         collectionView.register(SelectedCardImage.self, forCellWithReuseIdentifier: "cell")
-//        layout.itemSize = CGSize(width: 350, height: 300)
         layout.minimumInteritemSpacing = 20.0
         layout.minimumLineSpacing = 20.0
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.layer.cornerRadius = 15
+        
         collectionView.backgroundColor = UIColor().hexStringToUIColor(hex: "#BED3F3")
-       // scrollView.contentSize = CGSize(width: view.frame.size.width, height: 2000)
-       view.addSubview(selectedCard)
-       view.addSubview(closeButton)
-        //selectedCard.addSubview(Image)
+        view.addSubview(selectedCard)
+        view.addSubview(closeButton)
         selectedCard.addSubview(titleStackView)
         selectedCard.addSubview(addressIcon)
         selectedCard.addSubview(addressLabel)
         selectedCard.addSubview(cardStackView)
         selectedCard.addSubview(collectionView)
+        selectedCard.addSubview(nextView)
+        selectedCard.addSubview(previousView)
+        previousView.addSubview(previousIcon)
+        nextView.addSubview(nextIcon)
         titleLabel.text = museum_title
         //Image.image = img.image
         addressLabel.text = address_title
@@ -224,6 +249,22 @@ class selectCardView: UIViewController {
         collectionView?.leadingAnchor.constraint(equalTo: selectedCard.leadingAnchor).isActive = true
         collectionView?.trailingAnchor.constraint(equalTo: selectedCard.trailingAnchor).isActive = true
         collectionView?.bottomAnchor.constraint(equalTo: selectedCard.centerYAnchor,constant: -30).isActive = true
+        
+        nextView.topAnchor.constraint(equalTo: collectionView!.topAnchor).isActive = true
+        nextView.bottomAnchor.constraint(equalTo: collectionView!.bottomAnchor).isActive = true
+        nextView.trailingAnchor.constraint(equalTo: collectionView!.trailingAnchor).isActive = true
+        nextView.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        
+        previousView.topAnchor.constraint(equalTo: collectionView!.topAnchor).isActive = true
+        previousView.bottomAnchor.constraint(equalTo: collectionView!.bottomAnchor).isActive = true
+        previousView.leadingAnchor.constraint(equalTo: collectionView!.leadingAnchor).isActive = true
+        previousView.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        
+        nextIcon.trailingAnchor.constraint(equalTo: collectionView!.trailingAnchor).isActive = true
+        nextIcon.bottomAnchor.constraint(equalTo: collectionView!.centerYAnchor).isActive = true
+        
+        previousIcon.leadingAnchor.constraint(equalTo: collectionView!.leadingAnchor).isActive = true
+        previousIcon.bottomAnchor.constraint(equalTo: collectionView!.centerYAnchor).isActive = true
         
         titleStackView.topAnchor.constraint(equalTo:  collectionView!.bottomAnchor,constant: 20).isActive = true
         titleStackView.leadingAnchor.constraint(equalTo:  collectionView!.leadingAnchor,constant: 20).isActive = true
