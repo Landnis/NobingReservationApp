@@ -56,6 +56,21 @@ class RestaurantCardsView :MDCCardCollectionCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    lazy var verifiedIcon: UIImageView = {
+        let imageView = UIImageView(image: #imageLiteral(resourceName: "verified_filled_x20").withTintColor(UIColor().hexStringToUIColor(hex: "#118ab2")))
+        imageView.tintColor = .white
+        imageView.contentMode = .left
+        //imageView.backgroundColor = .systemBlue
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    lazy var titleStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [labelCard,verifiedIcon])
+        stackView.axis = .horizontal
+        stackView.spacing = 5.0
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
     let subLabel: UILabel = {
        var label = UILabel()
        label.backgroundColor = .clear
@@ -107,7 +122,7 @@ class RestaurantCardsView :MDCCardCollectionCell {
         super.init(frame: frame)
         self.addSubview(contentView)
         contentView.addSubview(imageCard)
-        contentView.addSubview(labelCard)
+        contentView.addSubview(titleStackView)
         contentView.addSubview(cardButton)
         contentView.addSubview(addressIcon)
         contentView.addSubview(subLabel)
@@ -133,23 +148,19 @@ class RestaurantCardsView :MDCCardCollectionCell {
         imageCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         imageCard.bottomAnchor.constraint(equalTo: contentView.centerYAnchor ).isActive = true
         //imageCard.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-        labelCard.topAnchor.constraint(equalTo: imageCard.bottomAnchor,constant: 20).isActive = true
-        labelCard.leadingAnchor.constraint(equalTo: imageCard.leadingAnchor,constant: 20).isActive = true
-        labelCard.trailingAnchor.constraint(equalTo: imageCard.trailingAnchor,constant: -30).isActive = true
+        titleStackView.topAnchor.constraint(equalTo: imageCard.bottomAnchor,constant: 20).isActive = true
+        titleStackView.leadingAnchor.constraint(equalTo: imageCard.leadingAnchor,constant: contentView.frame.size.width/3-20).isActive = true
+        titleStackView.trailingAnchor.constraint(equalTo: imageCard.trailingAnchor).isActive = true
         
-        addressIcon.topAnchor.constraint(equalTo: labelCard.bottomAnchor,constant: 5).isActive = true
-        addressIcon.leadingAnchor.constraint(equalTo: labelCard.leadingAnchor).isActive = true
+        addressIcon.topAnchor.constraint(equalTo: titleStackView.bottomAnchor,constant: 5).isActive = true
+        addressIcon.leadingAnchor.constraint(equalTo: imageCard.leadingAnchor).isActive = true
         
         subLabel.topAnchor.constraint(equalTo: addressIcon.topAnchor).isActive = true
         subLabel.leadingAnchor.constraint(equalTo: addressIcon.leadingAnchor,constant: 25).isActive = true
-        subLabel.trailingAnchor.constraint(equalTo: labelCard.trailingAnchor).isActive = true
+        subLabel.trailingAnchor.constraint(equalTo: imageCard.trailingAnchor).isActive = true
         
         phoneStackView.topAnchor.constraint(equalTo: addressIcon.bottomAnchor,constant: 30).isActive = true
         phoneStackView.leadingAnchor.constraint(equalTo: addressIcon.leadingAnchor).isActive = true
-        
-//        cardStackView.topAnchor.constraint(equalTo:  addressIcon.topAnchor).isActive = true
-//        cardStackView.leadingAnchor.constraint(equalTo:  addressIcon.leadingAnchor).isActive = true
-//        cardStackView.trailingAnchor.constraint(equalTo:  labelCard.trailingAnchor).isActive = true
         
         cardButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20).isActive = true
         cardButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30).isActive = true

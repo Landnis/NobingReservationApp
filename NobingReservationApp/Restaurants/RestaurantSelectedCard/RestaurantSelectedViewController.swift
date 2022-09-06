@@ -46,14 +46,21 @@ lazy var Image: UIImageView = {
 lazy var titleLabel: UILabel = {
    let label = UILabel()
     //label.text =
-   label.backgroundColor = .clear
-   label.textAlignment = .center
-   label.numberOfLines = 0
-   label.lineBreakMode = .byWordWrapping
-   label.font = UIFont(name: "HelveticaNeue-Light", size: 24)
-   label.setContentHuggingPriority(.defaultHigh, for: .vertical)
-   label.translatesAutoresizingMaskIntoConstraints = false
+    label.backgroundColor = .clear
+    label.sizeToFit()
+    label.textAlignment = .center
+    label.numberOfLines = 0
+    label.lineBreakMode = .byWordWrapping
+    label.font = UIFont(name: "HelveticaNeue-Light", size: 24)
+    label.setContentHuggingPriority(.defaultHigh, for: .vertical)
+    label.translatesAutoresizingMaskIntoConstraints = false
    return label
+}()
+lazy var verifiedIcon: UIImageView = {
+    let imageView = UIImageView(image: #imageLiteral(resourceName: "verified_filled_x20").withTintColor(UIColor().hexStringToUIColor(hex: "#118ab2")))
+    imageView.contentMode = .topLeft
+    imageView.translatesAutoresizingMaskIntoConstraints = false
+    return imageView
 }()
 
 lazy var addressLabel: UILabel = {
@@ -134,6 +141,15 @@ lazy var cardStackView: UIStackView = {
      stackView.translatesAutoresizingMaskIntoConstraints = false
      return stackView
  }()
+lazy var titleStackView: UIStackView = {
+    let stackView = UIStackView(arrangedSubviews: [titleLabel,verifiedIcon])
+    stackView.axis = .horizontal
+    stackView.spacing = 5.0
+    //stackView.distribution = .fillEqually
+    stackView.translatesAutoresizingMaskIntoConstraints = false
+    return stackView
+}()
+    
 
 var closeButton: MDCButton = {
     let button = MDCButton()
@@ -170,7 +186,7 @@ override func viewDidLoad() {
     view.addSubview(selectedCard)
     view.addSubview(closeButton)
     //selectedCard.addSubview(Image)
-    selectedCard.addSubview(titleLabel)
+    selectedCard.addSubview(titleStackView)
     selectedCard.addSubview(addressIcon)
     selectedCard.addSubview(addressLabel)
     selectedCard.addSubview(cardStackView)
@@ -200,20 +216,20 @@ func constraintLayout() {
     collectionView?.trailingAnchor.constraint(equalTo: selectedCard.trailingAnchor).isActive = true
     collectionView?.bottomAnchor.constraint(equalTo: selectedCard.centerYAnchor,constant: -30).isActive = true
     
-    titleLabel.topAnchor.constraint(equalTo:  collectionView!.bottomAnchor,constant: 20).isActive = true
-    titleLabel.leadingAnchor.constraint(equalTo:  collectionView!.leadingAnchor).isActive = true
-    titleLabel.trailingAnchor.constraint(equalTo:  collectionView!.trailingAnchor, constant: -10).isActive = true
+    titleStackView.topAnchor.constraint(equalTo:  collectionView!.bottomAnchor,constant: 20).isActive = true
+    titleStackView.leadingAnchor.constraint(equalTo:  collectionView!.leadingAnchor,constant: collectionView!.frame.size.width/3-20).isActive = true
+    titleStackView.trailingAnchor.constraint(equalTo:  collectionView!.trailingAnchor).isActive = true
     
-    addressIcon.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,constant: 20).isActive = true
-    addressIcon.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor).isActive = true
+    addressIcon.topAnchor.constraint(equalTo: titleStackView.bottomAnchor,constant: 20).isActive = true
+    addressIcon.leadingAnchor.constraint(equalTo: collectionView!.leadingAnchor).isActive = true
     
     addressLabel.topAnchor.constraint(equalTo: addressIcon.topAnchor).isActive = true
     addressLabel.leadingAnchor.constraint(equalTo: addressIcon.leadingAnchor,constant: 25).isActive = true
-    addressLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor).isActive = true
+    addressLabel.trailingAnchor.constraint(equalTo: collectionView!.trailingAnchor).isActive = true
     
     cardStackView.topAnchor.constraint(equalTo: addressLabel.bottomAnchor,constant: 15).isActive = true
-    cardStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor).isActive = true
-    cardStackView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor).isActive = true
+    cardStackView.leadingAnchor.constraint(equalTo: collectionView!.leadingAnchor).isActive = true
+    cardStackView.trailingAnchor.constraint(equalTo: collectionView!.trailingAnchor).isActive = true
     
     
 }
