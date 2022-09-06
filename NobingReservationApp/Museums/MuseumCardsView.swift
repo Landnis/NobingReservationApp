@@ -26,6 +26,20 @@ class MuseumsCardView: MDCCardCollectionCell {
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
+   
+    lazy var nextIcon: UIImageView = {
+        let imageView = UIImageView(image: #imageLiteral(resourceName: "nextArrow_x20").withTintColor(UIColor().hexStringToUIColor(hex: "#118ab2")))
+       
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    lazy var previousIcon: UIImageView = {
+        let imageView =  UIImageView(image: #imageLiteral(resourceName: "previousArrow_x20").withTintColor(UIColor().hexStringToUIColor(hex: "#118ab2")))
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     let cardButton: MDCButton = {
         let button = MDCButton()
         button.backgroundColor = UIColor().hexStringToUIColor(hex:"#457b9d")
@@ -148,6 +162,8 @@ class MuseumsCardView: MDCCardCollectionCell {
         imageCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         imageCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         imageCard.bottomAnchor.constraint(equalTo: contentView.centerYAnchor ).isActive = true
+        
+        
         //imageCard.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         titleStackView.topAnchor.constraint(equalTo: imageCard.bottomAnchor,constant: 20).isActive = true
         titleStackView.leadingAnchor.constraint(equalTo: imageCard.leadingAnchor,constant: 20).isActive = true
