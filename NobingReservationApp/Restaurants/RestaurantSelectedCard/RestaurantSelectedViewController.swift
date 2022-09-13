@@ -16,8 +16,6 @@ var address_title:String = ""
 var phone_label:String = ""
 var price_label:String = ""
 var collectionView: UICollectionView?
-//    var imageTitle = dataImages.map({$0.title})
-//    var imagesNames = dataImages.map({$0.images})
 var restaurantTitle = restaurantData.map({$0.title})
 var restaurantImages = restaurantDataImages.map({$0.images})
 
@@ -28,10 +26,40 @@ var selectedCard: UIView = {
    card.layer.shadowRadius = 10
    card.layer.shadowOpacity = 0.5
    card.layer.cornerRadius = 15
-   //card.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
    card.translatesAutoresizingMaskIntoConstraints = false
     return card
 }()
+lazy var nextIcon: UIImageView = {
+    let imageView = UIImageView(image: #imageLiteral(resourceName: "nextArrow_x20").withTintColor(.lightGray))
+    imageView.translatesAutoresizingMaskIntoConstraints = false
+    return imageView
+}()
+lazy var previousIcon: UIImageView = {
+    let imageView =  UIImageView(image: #imageLiteral(resourceName: "previousArrow_x20").withTintColor(.lightGray))
+    imageView.translatesAutoresizingMaskIntoConstraints = false
+    return imageView
+}()
+
+    lazy var nextView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .darkGray
+        view.alpha = 0.50
+        view.layer.cornerRadius = 15
+        view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+            
+    lazy var previousView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .darkGray
+        view.alpha = 0.50
+        view.layer.cornerRadius = 15
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
 lazy var Image: UIImageView = {
     var image = UIImageView()
@@ -56,6 +84,7 @@ lazy var titleLabel: UILabel = {
     label.translatesAutoresizingMaskIntoConstraints = false
    return label
 }()
+    
 lazy var verifiedIcon: UIImageView = {
     let imageView = UIImageView(image: #imageLiteral(resourceName: "verified_filled_x20").withTintColor(UIColor().hexStringToUIColor(hex: "#118ab2")))
     imageView.contentMode = .topLeft
@@ -191,6 +220,10 @@ override func viewDidLoad() {
     selectedCard.addSubview(addressLabel)
     selectedCard.addSubview(cardStackView)
     selectedCard.addSubview(collectionView)
+    selectedCard.addSubview(nextView)
+    selectedCard.addSubview(previousView)
+    nextView.addSubview(nextIcon)
+    previousView.addSubview(previousIcon)
     titleLabel.text = restaurant_title
     //Image.image = img.image
     addressLabel.text = address_title
@@ -202,7 +235,6 @@ override func viewDidLoad() {
 }
 
 func constraintLayout() {
-    //collectionView?.translatesAutoresizingMaskIntoConstraints = false
     selectedCard.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100).isActive = true
     selectedCard.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
     selectedCard.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
@@ -215,6 +247,22 @@ func constraintLayout() {
     collectionView?.leadingAnchor.constraint(equalTo: selectedCard.leadingAnchor).isActive = true
     collectionView?.trailingAnchor.constraint(equalTo: selectedCard.trailingAnchor).isActive = true
     collectionView?.bottomAnchor.constraint(equalTo: selectedCard.centerYAnchor,constant: -30).isActive = true
+    
+    nextView.topAnchor.constraint(equalTo: collectionView!.topAnchor).isActive = true
+    nextView.bottomAnchor.constraint(equalTo: collectionView!.bottomAnchor).isActive = true
+    nextView.trailingAnchor.constraint(equalTo: collectionView!.trailingAnchor).isActive = true
+    nextView.widthAnchor.constraint(equalToConstant: 25).isActive = true
+    
+    previousView.topAnchor.constraint(equalTo: collectionView!.topAnchor).isActive = true
+    previousView.bottomAnchor.constraint(equalTo: collectionView!.bottomAnchor).isActive = true
+    previousView.leadingAnchor.constraint(equalTo: collectionView!.leadingAnchor).isActive = true
+    previousView.widthAnchor.constraint(equalToConstant: 25).isActive = true
+    
+    nextIcon.trailingAnchor.constraint(equalTo: collectionView!.trailingAnchor).isActive = true
+    nextIcon.bottomAnchor.constraint(equalTo: collectionView!.centerYAnchor).isActive = true
+    
+    previousIcon.leadingAnchor.constraint(equalTo: collectionView!.leadingAnchor).isActive = true
+    previousIcon.bottomAnchor.constraint(equalTo: collectionView!.centerYAnchor).isActive = true
     
     titleStackView.topAnchor.constraint(equalTo:  collectionView!.bottomAnchor,constant: 20).isActive = true
     titleStackView.leadingAnchor.constraint(equalTo:  collectionView!.leadingAnchor,constant: collectionView!.frame.size.width/3-20).isActive = true

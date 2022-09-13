@@ -19,6 +19,23 @@ class SelectedCardImage: MDCCardCollectionCell  {
        image.translatesAutoresizingMaskIntoConstraints = false
        return image
    }()
+    lazy var nextView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .darkGray
+        view.alpha = 0.50
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    lazy var previousView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .darkGray
+        view.alpha = 0.50
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.frame.size.width = 400
@@ -44,6 +61,7 @@ class SelectedCardImage: MDCCardCollectionCell  {
         Image.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         Image.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         Image.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        
         
     }
 
