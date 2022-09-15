@@ -6,15 +6,15 @@
 //
 
 import UIKit
-
+import MaterialComponents.MDCActionSheetController
+import MaterialComponents.MDCActionSheetController_MaterialTheming
 class AboutViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor().hexStringToUIColor(hex: "#f5ebe0")
-        //view.addSubview(topbar)
-        
         addSubviews(with: traitCollection)
         constraint(with: traitCollection)
+        topbar.delegate = self
     }
     
     lazy var scrollView: UIScrollView = {
@@ -61,13 +61,25 @@ class AboutViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+    var titleText: UILabel = {
+        var label = UILabel()
+        label.backgroundColor = .clear
+        label.sizeToFit()
+        label.text = "About Me"
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.font = UIFont(name: "HelveticaNeue-ThinItalic", size: 25)
+        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     var bioText: UILabel = {
         var label = UILabel()
         label.backgroundColor = .clear
         label.sizeToFit()
         //label.contentMode = .scaleAspectFit
-        label.text = "Hello,\n\n My name is Konstantinos Stergiannis.I am graduated student of informatics engineering at Hellenic Mediterranean University of Crete.\nI was born on July 29th 1998 in Ptolemaida,in a small town in western Macedonia.I took the panhellenics exams back in 2016 , where i passed the department of informatics engeering.After a course of thirty and a half year and six month of intership at Hellenic mediterranean University of Crete i received my Bachelor degree./n At my intership i sterted to study Angular,Typescript,NodeJS and Ionic framework and after that i created my thesis project named 'Create a reservation web app for North Greece'. I created my thesis project's frontend with Angular-Typescript-Ionic  and the backend with MySQL,NodeJS,NodeJS-Express(API). After these 5 years, at july of 2021 i started my military service at Alexandroupoli where i completed it at april of 2022.At May of 2022 since i am working as an iOS Developer at Express Publishing at the expressDigibooks team."
+        label.text = "Hello,\n My name is Konstantinos Stergiannis.I am graduated student of informatics engineering at Hellenic Mediterranean University of Crete.\nI was born on July 29th 1998 in Ptolemaida,in a small town in western Macedonia.I took the panhellenics exams back in 2016 , where i passed the department of informatics engeering.After a course of thirty and a half year and six month of intership at Hellenic mediterranean University of Crete i received my Bachelor degree./n At my intership i sterted to study Angular,Typescript,NodeJS and Ionic framework and after that i created my thesis project named 'Create a reservation web app for North Greece'. I created my thesis project's frontend with Angular-Typescript-Ionic  and the backend with MySQL,NodeJS,NodeJS-Express(API). After these 5 years, at july of 2021 i started my military service at Alexandroupoli where i completed it at april of 2022.At May of 2022 since i am working as an iOS Developer at Express Publishing at the expressDigibooks team."
         label.textAlignment = .left
         label.numberOfLines = 0
         //label.lineBreakMode = .byWordWrapping
@@ -93,6 +105,7 @@ class AboutViewController: UIViewController {
     func addSubviews(with traitCollection: UITraitCollection){
         print("add")
         aboutView.addSubview(textView)
+        aboutView.addSubview(titleText)
         textView.addSubview(bioText)
         aboutView.addSubview(profilImage)
         scrollView.addSubview(aboutView)
@@ -106,7 +119,8 @@ class AboutViewController: UIViewController {
         topbar.removeFromSuperview()
         aboutView.removeFromSuperview()
         textView.removeFromSuperview()
-       // bioText.removeFromSuperview()
+        bioText.removeFromSuperview()
+        titleText.removeFromSuperview()
     }
   
     
@@ -130,19 +144,18 @@ class AboutViewController: UIViewController {
         profilImage.widthAnchor.constraint(equalToConstant: 110).isActive = true
         profilImage.heightAnchor.constraint(equalToConstant: 110).isActive = true
         
-      
-//      textView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor).isActive = true
-//      textView.topAnchor.constraint(equalTo: aboutView.bottomAnchor).isActive = true
-//      textView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor).isActive = true
-//      textView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor).isActive = true
-//      textView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor).isActive = true
-//      textView.heightAnchor.constraint(equalTo: scrollView.contentLayoutGuide.heightAnchor).isActive = true
+        
         textView.leadingAnchor.constraint(equalTo: aboutView.leadingAnchor,constant: 15).isActive = true
         textView.topAnchor.constraint(equalTo: profilImage.centerYAnchor).isActive = true
         textView.trailingAnchor.constraint(equalTo: aboutView.trailingAnchor,constant: -15).isActive = true
-       // textView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor).isActive = true
         
-        bioText.topAnchor.constraint(equalTo: profilImage.bottomAnchor).isActive = true
+        titleText.topAnchor.constraint(equalTo: profilImage.bottomAnchor).isActive = true
+        titleText.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        titleText.widthAnchor.constraint(equalTo: textView.widthAnchor).isActive = true
+        titleText.leadingAnchor.constraint(equalTo: textView.leadingAnchor).isActive = true
+        titleText.trailingAnchor.constraint(equalTo: textView.trailingAnchor).isActive = true
+
+        bioText.topAnchor.constraint(equalTo: titleText.bottomAnchor).isActive = true
         bioText.leadingAnchor.constraint(equalTo: textView.leadingAnchor,constant: 5).isActive = true
         bioText.bottomAnchor.constraint(equalTo: textView.bottomAnchor).isActive = true
         
@@ -169,5 +182,24 @@ class AboutViewController: UIViewController {
                bioText.heightAnchor.constraint(equalToConstant: textView.frame.size.width).isActive = true
                bioText.trailingAnchor.constraint(equalTo: textView.trailingAnchor,constant: -5).isActive = true
            }
+    }
+}
+extension AboutViewController :TopBarViewDelegate {
+    func logoutAlert() {
+        let viewController = TabBarController()
+        viewController.modalTransitionStyle = .crossDissolve
+        viewController.modalPresentationStyle = .fullScreen
+
+        let actionSheet = MDCActionSheetController(title: "Logout",
+                                                   message: "Press Here if you want to logout!")
+        let actionOne = MDCActionSheetAction(title: "Logout",
+                                             image: UIImage(named: "logout_x20"),
+                                             handler: { _ in self.present(viewController, animated: true)})
+        actionSheet.addAction(actionOne)
+        present(actionSheet, animated: true, completion: nil)
+    }
+    
+    func tappedMenu() {
+      print("swipe")
     }
 }

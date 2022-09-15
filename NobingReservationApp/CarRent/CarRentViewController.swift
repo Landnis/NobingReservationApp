@@ -12,6 +12,8 @@ import SideMenu
 class CarRentViewController: UIViewController {
 
     private var collectionView: UICollectionView?
+    var refreshControl = UIRefreshControl()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,9 +36,19 @@ class CarRentViewController: UIViewController {
         collectionView.frame = view.bounds
         self.view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
+        collectionView.addSubview(refreshControl)
         constraint()
-        // Do any additional setup after loading the view.
+       
     }
+    
+    @objc func refresh(send: UIRefreshControl){
+        DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+            self.collectionView?.reloadData()
+            self.refreshControl.endRefreshing()
+        }
+    }
+    
     lazy var topbar: TopBarView = {
          let topbar = TopBarView()
          topbar.translatesAutoresizingMaskIntoConstraints = false

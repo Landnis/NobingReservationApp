@@ -22,6 +22,9 @@
 		CF21CC1D28994D94005291E3 /* hotelModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF21CC1C28994D94005291E3 /* hotelModels.swift */; };
 		CF34049928C601A200908F70 /* BottomBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF34049828C601A200908F70 /* BottomBarViewController.swift */; };
 		CF34049B28C601FC00908F70 /* BottomBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF34049A28C601FC00908F70 /* BottomBarView.swift */; };
+		CF39A1C228D31B9D003B8A67 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF39A1C128D31B9D003B8A67 /* ActivityIndicator.swift */; };
+		CF39A1C628D31D22003B8A67 /* UIView+HiddenInStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF39A1C528D31D22003B8A67 /* UIView+HiddenInStackView.swift */; };
+		CF39A1C828D32513003B8A67 /* MDCFilledTextField+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF39A1C728D32513003B8A67 /* MDCFilledTextField+Error.swift */; };
 		CF4C260E289A9607008F291C /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C260D289A9607008F291C /* MenuViewController.swift */; };
 		CF4C2613289AA460008F291C /* HotelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C2612289AA460008F291C /* HotelsViewController.swift */; };
 		CF4C2615289AA480008F291C /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C2614289AA47F008F291C /* InfoViewController.swift */; };
@@ -33,6 +36,7 @@
 		CFB6684628AE83DD004BB619 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB6684528AE83DD004BB619 /* AboutViewController.swift */; };
 		CFC19D1728B7B6A60065F163 /* HotelCardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC19D1628B7B6A60065F163 /* HotelCardsView.swift */; };
 		CFC19D1A28B7B8230065F163 /* HotelSelectedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC19D1928B7B8220065F163 /* HotelSelectedViewController.swift */; };
+		CFC2409B28D1D2FB004E99FE /* ContactUsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC2409A28D1D2FB004E99FE /* ContactUsView.swift */; };
 		CFCEA80E28AF6D8F0072A7CA /* museumsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCEA80D28AF6D8E0072A7CA /* museumsModel.swift */; };
 		CFD0460628BDFDCB00129FAB /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD0460528BDFDCA00129FAB /* SignUpView.swift */; };
 		CFD0460928BE014200129FAB /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD0460828BE014200129FAB /* SignUpViewController.swift */; };
@@ -68,6 +72,9 @@
 		CF21CC1C28994D94005291E3 /* hotelModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hotelModels.swift; sourceTree = "<group>"; };
 		CF34049828C601A200908F70 /* BottomBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomBarViewController.swift; sourceTree = "<group>"; };
 		CF34049A28C601FC00908F70 /* BottomBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomBarView.swift; sourceTree = "<group>"; };
+		CF39A1C128D31B9D003B8A67 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		CF39A1C528D31D22003B8A67 /* UIView+HiddenInStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+HiddenInStackView.swift"; sourceTree = "<group>"; };
+		CF39A1C728D32513003B8A67 /* MDCFilledTextField+Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MDCFilledTextField+Error.swift"; sourceTree = "<group>"; };
 		CF4C260D289A9607008F291C /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		CF4C2612289AA460008F291C /* HotelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotelsViewController.swift; sourceTree = "<group>"; };
 		CF4C2614289AA47F008F291C /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
@@ -79,6 +86,7 @@
 		CFB6684528AE83DD004BB619 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		CFC19D1628B7B6A60065F163 /* HotelCardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotelCardsView.swift; sourceTree = "<group>"; };
 		CFC19D1928B7B8220065F163 /* HotelSelectedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotelSelectedViewController.swift; sourceTree = "<group>"; };
+		CFC2409A28D1D2FB004E99FE /* ContactUsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUsView.swift; sourceTree = "<group>"; };
 		CFCEA80D28AF6D8E0072A7CA /* museumsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = museumsModel.swift; sourceTree = "<group>"; };
 		CFD0460528BDFDCA00129FAB /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		CFD0460828BE014200129FAB /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -152,6 +160,7 @@
 		CF20E5B32897AE4A004AF54F /* NobingReservationApp */ = {
 			isa = PBXGroup;
 			children = (
+				CF39A1C428D31D06003B8A67 /* Extensions */,
 				CFE0826828B8B322000C0496 /* NobingReservationApp.entitlements */,
 				CF20E5B42897AE4A004AF54F /* AppDelegate.swift */,
 				CF20E5B82897AE4A004AF54F /* ViewController.swift */,
@@ -184,6 +193,7 @@
 				CF20E5C82897B1D0004AF54F /* colorPaletteHex.swift */,
 				CF20E5CE28980099004AF54F /* AlertController.swift */,
 				CF20E5D228980D9F004AF54F /* TopBarView.swift */,
+				CF39A1C128D31B9D003B8A67 /* ActivityIndicator.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -195,6 +205,15 @@
 				CF34049A28C601FC00908F70 /* BottomBarView.swift */,
 			);
 			path = BottomBarComponent;
+			sourceTree = "<group>";
+		};
+		CF39A1C428D31D06003B8A67 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CF39A1C528D31D22003B8A67 /* UIView+HiddenInStackView.swift */,
+				CF39A1C728D32513003B8A67 /* MDCFilledTextField+Error.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		CF4C2604289A939F008F291C /* Home */ = {
@@ -282,6 +301,7 @@
 			isa = PBXGroup;
 			children = (
 				CFA33D80289BC8CF007DA0B5 /* ContactViewController.swift */,
+				CFC2409A28D1D2FB004E99FE /* ContactUsView.swift */,
 			);
 			path = Contact;
 			sourceTree = "<group>";
@@ -460,6 +480,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF39A1C228D31B9D003B8A67 /* ActivityIndicator.swift in Sources */,
 				CFD4ECE228BCEAF7002A14B8 /* CarRentCardsView.swift in Sources */,
 				CFD0460D28BE211700129FAB /* TabBarController.swift in Sources */,
 				CF21CC1828990C37005291E3 /* MuseumViewController.swift in Sources */,
@@ -468,6 +489,7 @@
 				CF8A154328B37C740020525E /* SelectedCardImage.swift in Sources */,
 				CF20E5CD2897FB10004AF54F /* HomeViewController.swift in Sources */,
 				CFA33D81289BC8CF007DA0B5 /* ContactViewController.swift in Sources */,
+				CF39A1C628D31D22003B8A67 /* UIView+HiddenInStackView.swift in Sources */,
 				CF34049928C601A200908F70 /* BottomBarViewController.swift in Sources */,
 				CF4C2617289AA55B008F291C /* CarRentViewController.swift in Sources */,
 				CFD4ECE028BCEADE002A14B8 /* CarRentSelectedCardViewController.swift in Sources */,
@@ -485,10 +507,12 @@
 				CF20E5D328980D9F004AF54F /* TopBarView.swift in Sources */,
 				CF20E5C92897B1D0004AF54F /* colorPaletteHex.swift in Sources */,
 				CFD4ECD828BCD073002A14B8 /* RestaurantSelectedViewController.swift in Sources */,
+				CF39A1C828D32513003B8A67 /* MDCFilledTextField+Error.swift in Sources */,
 				CFD0460B28BE01E000129FAB /* LoginView.swift in Sources */,
 				CF4C2615289AA480008F291C /* InfoViewController.swift in Sources */,
 				CFC19D1728B7B6A60065F163 /* HotelCardsView.swift in Sources */,
 				CFD0460928BE014200129FAB /* SignUpViewController.swift in Sources */,
+				CFC2409B28D1D2FB004E99FE /* ContactUsView.swift in Sources */,
 				CFD4ECDC28BCE93E002A14B8 /* CarRentalModel.swift in Sources */,
 				CF20E5B52897AE4A004AF54F /* AppDelegate.swift in Sources */,
 				CFD0460628BDFDCB00129FAB /* SignUpView.swift in Sources */,

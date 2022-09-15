@@ -15,7 +15,7 @@ import MaterialComponents.MaterialButtons
 import MaterialComponents.MaterialButtons_Theming
 import MaterialComponents.MaterialTabs_TabBarView
 protocol SignUpDelegate: AnyObject {
-    func didTapSignUpButton(email:String?,firstPassword:String?,rewritePassword:String?)
+    func didTapSignUpButton(username:String?,email:String?,firstPassword:String?,rewritePassword:String?)
 }
 
 class SignUpView : UIView {
@@ -25,7 +25,7 @@ class SignUpView : UIView {
         super.init(frame: frame)
         self.backgroundColor = .systemRed
         self.addSubview(formStackView)
-        self.addSubview(signUpButton)
+        self.addSubview(signupButtonStackView)
         self.addSubview(signUpLabel)
         signUpConstraint()
     }
@@ -168,7 +168,7 @@ class SignUpView : UIView {
     
     
     lazy var formStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [emailTextField,passwordTextField,repeatPasswordTextField])
+        let stackView = UIStackView(arrangedSubviews: [newUsernameTextField,emailTextField,passwordTextField,repeatPasswordTextField])
          stackView.axis = .vertical
          stackView.spacing = 20.0
          stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -184,11 +184,46 @@ class SignUpView : UIView {
         button.backgroundColor = UIColor().hexStringToUIColor(hex: "#495057")
         button.addTarget(self, action: #selector(signUpButtonTouchUpInsideHandler(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         return button
+    }()
+    lazy var activityIndicator: MDCActivityIndicator = {
+        let activityIndicator = MDCActivityIndicator(frame: .zero)
+        activityIndicator.cycleColors = [UIColor().hexStringToUIColor(hex: "#495057")]
+        activityIndicator.isHiddenInStackView = true
+        return activityIndicator
+    }()
+    
+    lazy var signupButtonStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [signUpButton, activityIndicator])
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
     }()
     
     @objc func signUpButtonTouchUpInsideHandler(_ sender: UIButton){
-        delegate?.didTapSignUpButton(email: emailTextField.text!, firstPassword: passwordTextField.text!,rewritePassword:repeatPasswordTextField.text!)
+        guard
+            let email = emailTextField.text,
+            let username = newUsernameTextField.text,
+            let password = passwordTextField.text,
+            let repeatPassword = repeatPasswordTextField.text
+        else {
+            return
+        }
+        if username.isEmpty {
+            newUsernameTextField.showError(text: "Username required.")
+        }
+        if email.isEmpty {
+            emailTextField.showError(text: "Username required.")
+        }
+        if password.isEmpty{
+            passwordTextField.showError(text: "Password required.")
+        }
+        if repeatPassword.isEmpty{
+            repeatPasswordTextField.showError(text: "Repeat Password required.")
+        }
+        guard !username.isEmpty && !password.isEmpty else { return }
+        start()
+        delegate?.didTapSignUpButton(username: newUsernameTextField.text,email: emailTextField.text!, firstPassword: passwordTextField.text!,rewritePassword:repeatPasswordTextField.text!)
     }
 
     
@@ -202,10 +237,25 @@ class SignUpView : UIView {
         formStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20).isActive = true
         formStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
         
-        signUpButton.topAnchor.constraint(equalTo: formStackView.bottomAnchor, constant: 30).isActive = true
-        signUpButton.leadingAnchor.constraint(equalTo: formStackView.leadingAnchor).isActive = true
-        signUpButton.trailingAnchor.constraint(equalTo: formStackView.trailingAnchor).isActive = true
-        signUpButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        signupButtonStackView.topAnchor.constraint(equalTo: formStackView.bottomAnchor, constant: 30).isActive = true
+        signupButtonStackView.leadingAnchor.constraint(equalTo: formStackView.leadingAnchor).isActive = true
+        signupButtonStackView.trailingAnchor.constraint(equalTo: formStackView.trailingAnchor).isActive = true
+        
  
     }
+}
+extension SignUpView: ActivityIndicator {
+    
+    func start() {
+       signUpButton.isHidden = true
+       activityIndicator.isHidden = false
+       activityIndicator.startAnimating()
+    }
+    
+    func stop() {
+        signUpButton.isHidden = false
+        activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
+    }
+    
 }
