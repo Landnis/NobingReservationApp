@@ -109,20 +109,22 @@ extension LoginViewController : LoginViewDelegate {
         else {
             return
         }
-    
-        if (username.isEmpty && password.isEmpty){
-            self.presentAlert(title: "Error", message: "Empty fields")
-        }else if username.isEmpty {
-            self.presentAlert(title: "Error", message: "Empty username field")
-        }else if password.isEmpty {
-            self.presentAlert(title: "Error", message: "Empty password field")
-        }else if password.count < 8 {
+        if username == "Kostas.stergiannis" {
+            self.presentAlert(title: "Error", message: "Write another username")
+            self.loginView.stop()
+        } else if password.count < 8 {
             self.presentAlert(title: "Error", message: "Password must be 8 letter and more!!")
+            self.loginView.passwordTextField.text = ""
+            self.loginView.stop()
         } else{
+            
             let viewController = BottomBarViewController()
             viewController.modalTransitionStyle = .crossDissolve
             viewController.modalPresentationStyle = .fullScreen
-            self.present(viewController, animated: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.present(viewController, animated: true)
+            }
+            
         }
     }
     

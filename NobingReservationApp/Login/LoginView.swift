@@ -14,7 +14,7 @@ import MaterialComponents.MaterialTextControls_OutlinedTextAreas
 import MaterialComponents.MaterialButtons
 import MaterialComponents.MaterialButtons_Theming
 import MaterialComponents.MaterialTabs_TabBarView
-
+import MaterialComponents.MaterialActivityIndicator
 protocol LoginViewDelegate: AnyObject {
     func didTappedLoginButton(usernameText:String?,passwordText:String?)
 }
@@ -128,10 +128,38 @@ class LoginView: UIView {
         button.backgroundColor = UIColor().hexStringToUIColor(hex: "#495057")
         button.addTarget(self, action: #selector(loginButtonTouchUpInsideHandler(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         return button
     }()
     
+    lazy var activityIndicator: MDCActivityIndicator = {
+        let activityIndicator = MDCActivityIndicator(frame: .zero)
+        activityIndicator.cycleColors = [UIColor().hexStringToUIColor(hex: "#495057")]
+        activityIndicator.isHiddenInStackView = true
+        return activityIndicator
+    }()
+    
+    lazy var loginButtonStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [loginButton, activityIndicator])
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
     @objc func loginButtonTouchUpInsideHandler(_ sender: UIButton){
+        guard
+            let username = usernameTextField.text,
+            let password = passwordTextField.text
+        else {
+            return
+        }
+        if username.isEmpty {
+            usernameTextField.showError(text: "Username required.")
+        }
+        if password.isEmpty{
+            passwordTextField.showError(text: "Password required.")
+        }
+        guard !username.isEmpty && !password.isEmpty else { return }
+        start()
         delegate?.didTappedLoginButton(usernameText: usernameTextField.text!, passwordText: passwordTextField.text!)
     }
 
@@ -140,7 +168,7 @@ class LoginView: UIView {
         self.backgroundColor = .systemRed
         //self.addSubview(tabBarView)
         self.addSubview(formStackView)
-        self.addSubview(loginButton)
+        self.addSubview(loginButtonStackView)
         self.addSubview(loginLabel)
         self.addSubview(forgοtPasswordButton)
         loginConstraint()
@@ -161,16 +189,29 @@ class LoginView: UIView {
         formStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20).isActive = true
         formStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
         
-        loginButton.topAnchor.constraint(equalTo: formStackView.bottomAnchor, constant: 30).isActive = true
-        loginButton.leadingAnchor.constraint(equalTo: formStackView.leadingAnchor).isActive = true
-        loginButton.trailingAnchor.constraint(equalTo: formStackView.trailingAnchor).isActive = true
-        loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        loginButtonStackView.topAnchor.constraint(equalTo: formStackView.bottomAnchor, constant: 30).isActive = true
+        loginButtonStackView.leadingAnchor.constraint(equalTo: formStackView.leadingAnchor).isActive = true
+        loginButtonStackView.trailingAnchor.constraint(equalTo: formStackView.trailingAnchor).isActive = true
         
-        forgοtPasswordButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor,constant: 20).isActive = true
-        forgοtPasswordButton.leadingAnchor.constraint(equalTo: loginButton.leadingAnchor).isActive = true
+        forgοtPasswordButton.topAnchor.constraint(equalTo: loginButtonStackView.bottomAnchor,constant: 20).isActive = true
+        forgοtPasswordButton.leadingAnchor.constraint(equalTo: loginButtonStackView.leadingAnchor).isActive = true
         
         
     }
     
 }
-
+extension LoginView: ActivityIndicator {
+    
+    func start() {
+        self.loginButton.isHidden = true
+        self.activityIndicator.isHidden = false
+        self.activityIndicator.startAnimating()
+    }
+    
+    func stop() {
+        loginButton.isHidden = false
+        activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
+    }
+    
+}

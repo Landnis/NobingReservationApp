@@ -13,7 +13,8 @@ import MaterialComponents.MDCActionSheetController_MaterialTheming
 class MuseumViewController: UIViewController,AlertController{
 
     private var collectionView: UICollectionView?
- 
+    var refreshControl = UIRefreshControl()
+
     var topbar: TopBarView = {
         let topbar = TopBarView()
         topbar.translatesAutoresizingMaskIntoConstraints = false
@@ -42,8 +43,18 @@ class MuseumViewController: UIViewController,AlertController{
         self.view.addSubview(collectionView)
         view.addSubview(topbar)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
+        collectionView.addSubview(refreshControl)
         topbarConstraints()
     }
+    
+    @objc func refresh(send: UIRefreshControl){
+        DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+            self.collectionView?.reloadData()
+            self.refreshControl.endRefreshing()
+        }
+    }
+    
     func topbarConstraints(){
         topbar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         topbar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true

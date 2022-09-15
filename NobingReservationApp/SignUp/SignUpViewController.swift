@@ -15,7 +15,7 @@ class SignUpViewController: UIViewController,AlertController {
         addSubviews(with: traitCollection)
         constraint(with: traitCollection)
         scrollView.addSubview(signupView)
-        
+        self.signupView.delegate = self
     }
     lazy var signupView: SignUpView = {
         let view = SignUpView()
@@ -90,33 +90,42 @@ class SignUpViewController: UIViewController,AlertController {
 }
 
 extension SignUpViewController: SignUpDelegate {
-    func didTapSignUpButton(email: String?, firstPassword: String?, rewritePassword: String?) {
+    func didTapSignUpButton(username:String?,email: String?, firstPassword: String?, rewritePassword: String?) {
         guard
-            let emailtext = email,
+            let email = email,
+            let username = username,
             let password = firstPassword,
-            let identicalPass = rewritePassword
+            let repeatPassword = rewritePassword
         else {
             return
         }
-    
-        if (emailtext.isEmpty && password.isEmpty && identicalPass.isEmpty){
-            self.presentAlert(title: "Error", message: "Empty fields")
-        }else if emailtext.isEmpty  {
-            self.presentAlert(title: "Error", message: "Empty email field")
-        }else if password.isEmpty {
-            self.presentAlert(title: "Error", message: "Empty password field")
-        }else if identicalPass.isEmpty {
-            self.presentAlert(title: "Error", message: "Empty password field")
-        }else if password.count < 8 || identicalPass.count < 8{
+        if username == "Kostas.stergiannis" {
+            self.presentAlert(title: "Error", message: "Write another username")
+            self.signupView.newUsernameTextField.text = ""
+            self.signupView.stop()
+        } else if password.count < 8 || repeatPassword.count < 8{
             self.presentAlert(title: "Error", message: "Password must be 8 letter and more!!")
-        }else if password != identicalPass{
-            self.presentAlert(title: "Error", message: "Passwords don't match")
-        } else{
-            let viewController = HomeViewController()
+            self.signupView.passwordTextField.text = ""
+            self.signupView.repeatPasswordTextField.text = ""
+            self.signupView.stop()
+        } else if password != repeatPassword{
+            self.presentAlert(title: "Error", message: "Passwords must be the same!")
+            self.signupView.repeatPasswordTextField.text = ""
+            self.signupView.stop()
+        }else if email == "Kostas.stergiannis98@gmail.com"{
+            self.presentAlert(title: "Error", message: "Write another username")
+            self.signupView.emailTextField.text = ""
+            self.signupView.stop()
+        }else {
+            
+            let viewController = BottomBarViewController()
             viewController.modalTransitionStyle = .crossDissolve
             viewController.modalPresentationStyle = .fullScreen
-            self.present(viewController, animated: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.present(viewController, animated: true)
+            }
+            
         }
-    }
 }
 
+}
