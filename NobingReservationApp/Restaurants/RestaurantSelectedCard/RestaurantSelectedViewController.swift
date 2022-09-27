@@ -18,6 +18,7 @@ var price_label:String = ""
 var collectionView: UICollectionView?
 var restaurantTitle = restaurantData.map({$0.title})
 var restaurantImages = restaurantDataImages.map({$0.images})
+let datePicker = UIDatePicker()
 
 var selectedCard: UIView = {
     let card = UIView()
@@ -194,6 +195,12 @@ var closeButton: MDCButton = {
     dismiss(animated: true)
 }
 
+lazy var txtDatePicker: UITextField = {
+    let text = UITextField()
+    text.translatesAutoresizingMaskIntoConstraints = false
+    return text
+}()
+    
 override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = UIColor().hexStringToUIColor(hex: "#457b9d")
@@ -222,6 +229,7 @@ override func viewDidLoad() {
     selectedCard.addSubview(collectionView)
     selectedCard.addSubview(nextView)
     selectedCard.addSubview(previousView)
+    //selectedCard.addSubview(datePicker)
     nextView.addSubview(nextIcon)
     previousView.addSubview(previousIcon)
     titleLabel.text = restaurant_title
@@ -231,9 +239,37 @@ override func viewDidLoad() {
     priceLabel.text = price_label
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     constraintLayout()
-
+    //showDatePicker()
 }
+    
+    func showDatePicker(){
+        //Formate Date
+        datePicker.datePickerMode = .date
 
+       //ToolBar
+       let toolbar = UIToolbar();
+       toolbar.sizeToFit()
+       let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(donedatePicker));
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+      let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelDatePicker));
+
+     toolbar.setItems([doneButton,spaceButton,cancelButton], animated: false)
+
+      txtDatePicker.inputAccessoryView = toolbar
+      txtDatePicker.inputView = datePicker
+
+     }
+    @objc func donedatePicker(){
+
+      let formatter = DateFormatter()
+      formatter.dateFormat = "dd/MM/yyyy"
+      txtDatePicker.text = formatter.string(from: datePicker.date)
+      self.view.endEditing(true)
+    }
+
+    @objc func cancelDatePicker(){
+       self.view.endEditing(true)
+    }
 func constraintLayout() {
     selectedCard.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100).isActive = true
     selectedCard.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
@@ -278,8 +314,7 @@ func constraintLayout() {
     cardStackView.topAnchor.constraint(equalTo: addressLabel.bottomAnchor,constant: 15).isActive = true
     cardStackView.leadingAnchor.constraint(equalTo: collectionView!.leadingAnchor).isActive = true
     cardStackView.trailingAnchor.constraint(equalTo: collectionView!.trailingAnchor).isActive = true
-    
-    
+
 }
 
 }

@@ -69,12 +69,12 @@ class HotelsViewController: UIViewController,AlertController {
 
 extension HotelsViewController: UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data.count
+        return hotelData.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! HotelCardsView
-        let Museums = data
+        let Museums = hotelData
         cell.configure(label: "\(Museums[indexPath.row].title!)")
         cell.configure(with: Museums[indexPath.row].image!)
         cell.configure(phoneLabel: ": "+Museums[indexPath.row].phone!)
@@ -87,16 +87,16 @@ extension HotelsViewController: UICollectionViewDataSource,UICollectionViewDeleg
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("Select section \(indexPath.section) and row \(indexPath.row)")
-        let Museums = data
+        let Hotels = hotelData
         let vc = HotelSelectedViewController()
         self.navigationController?.pushViewController(HotelSelectedViewController(), animated: true)
         self.modalPresentationStyle = .formSheet
-        vc.hotel_title = Museums[indexPath.item].title!
-        vc.img.image = Museums[indexPath.item].image!
+        vc.hotel_title = Hotels[indexPath.item].title!
+        vc.img.image = Hotels[indexPath.item].image!
         //vc.img.image = Hotels[indexPath.row].images!
-        vc.address_title = ": "+Museums[indexPath.item].subTitle!
-        vc.phone_label = ": "+Museums[indexPath.item].phone!
-        vc.price_label = ": \(Museums[indexPath.item].price!)€ per day"
+        vc.address_title = ": "+Hotels[indexPath.item].subTitle!
+        vc.phone_label = ": "+Hotels[indexPath.item].phone!
+        vc.price_label = ": \(Hotels[indexPath.item].price!)€ per day"
         present(vc, animated: true)
     }
   

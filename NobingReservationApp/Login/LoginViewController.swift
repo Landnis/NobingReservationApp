@@ -100,7 +100,7 @@ class LoginViewController: UIViewController, AlertController{
 }
 
 extension LoginViewController : LoginViewDelegate {
-   
+       
     func didTappedLoginButton(usernameText:String?,passwordText:String?) {
       
         guard
@@ -128,6 +128,11 @@ extension LoginViewController : LoginViewDelegate {
         }
     }
     
-    
+    func didTappedForgotButton() {
+        let viewController = ForgotPasswordViewController()
+        viewController.modalTransitionStyle = .crossDissolve
+        viewController.modalPresentationStyle = .formSheet
+        self.present(viewController, animated: true)
+    }
 }
 
