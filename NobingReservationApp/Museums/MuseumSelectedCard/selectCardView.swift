@@ -17,15 +17,12 @@ class selectCardView: UIViewController {
     var phone_label:String = ""
     var price_label:String = ""
     var collectionView: UICollectionView?
-//    var imageTitle = dataImages.map({$0.title})
-//    var imagesNames = dataImages.map({$0.images})
     var museumTitle = dataMuseumsImages.map({$0.title})
     var museumImages = dataMuseumsImages.map({$0.images})
-    var carousel = data.map({$0.image})
     
     var selectedCard: UIView = {
         let card = UIView()
-       card.backgroundColor = UIColor().hexStringToUIColor(hex: "#BED3F3")
+        card.backgroundColor = UIColor().hexStringToUIColor(hex: "#BED3F3")
         card.layer.shadowOffset = CGSize(width: 10, height: 10)
         card.layer.shadowRadius = 10
         card.layer.shadowOpacity = 0.5
@@ -212,7 +209,6 @@ class selectCardView: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.layer.cornerRadius = 15
-        
         collectionView.backgroundColor = UIColor().hexStringToUIColor(hex: "#BED3F3")
         view.addSubview(selectedCard)
         view.addSubview(closeButton)

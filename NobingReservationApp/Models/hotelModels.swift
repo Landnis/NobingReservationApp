@@ -20,7 +20,7 @@ struct hotelImages {
     var title: String?
 }
 //UIImageView(image: #imageLiteral(resourceName: "hotelApsis").withRenderingMode(.alwaysTemplate))
-var data = [
+var hotelData = [
 
 hotelModels(title: "Hotel Terelidis", subTitle:"14o km Ptolemaidas-Kastorias, Ptolemaida 502 00",phone:"+30 698 427 7344" , image: UIImage(named: "hotelTerelidis"),price: 30.0),
 hotelModels(title: "Hotel Pantelidis",subTitle:"3okm ptolemaidas,Mpodosakio,Ptolemaida 502 00",phone:"+30 2463 053300" , image: UIImage(named: "hotelPantelidis"),price: 50.0),
@@ -39,13 +39,3 @@ var dataImages = [
     hotelImages(images: [UIImage(named:"hotelApsis")!,UIImage(named:"hotelApsis2")!,UIImage(named:"hotelApsis3")!,UIImage(named:"hotelApsis4")!,UIImage(named:"hotelApsis5")!,UIImage(named:"hotelApsis6")!,UIImage(named:"hotelApsis7")!,UIImage(named:"hotelApsis8")!,UIImage(named:"hotelApsis9")!], title: "Apsis Hotel")
 ]
 
-//var data1 = [
-//    UIImage(named:"hotelTerelidis1"),
-//    UIImage(named:"hotelTerelidis2"),
-//    UIImage(named:"hotelTerelidis3"),
-//    UIImage(named:"hotelTerelidis4"),
-//    UIImage(named:"hotelTerelidis5"),
-//    UIImage(named:"hotelTerelidis6"),
-//    UIImage(named:"hotelTerelidis7"),
-//    UIImage(named:"hotelTerelidis8")
-//]

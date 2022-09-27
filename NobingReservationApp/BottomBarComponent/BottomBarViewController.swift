@@ -54,7 +54,6 @@ class BottomBarViewController: UIViewController {
     }()
     lazy var rootView: BottomBarView = BottomBarView(frame: .zero)
 
-    
     override func loadView() {
         view = rootView
     }

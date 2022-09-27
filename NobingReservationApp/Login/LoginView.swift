@@ -17,6 +17,7 @@ import MaterialComponents.MaterialTabs_TabBarView
 import MaterialComponents.MaterialActivityIndicator
 protocol LoginViewDelegate: AnyObject {
     func didTappedLoginButton(usernameText:String?,passwordText:String?)
+    func didTappedForgotButton()
 }
 
 class LoginView: UIView {
@@ -50,6 +51,7 @@ class LoginView: UIView {
     
     @objc func forgοtButtonTouchUpInsideHandler(_ sender: UIButton) {
         print("Forgot Button pressed")
+        delegate?.didTappedForgotButton()
     }
     
     lazy var usernameTextField: MDCFilledTextField = {

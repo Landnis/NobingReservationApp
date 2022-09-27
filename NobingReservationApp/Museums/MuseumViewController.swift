@@ -20,7 +20,24 @@ class MuseumViewController: UIViewController,AlertController{
         topbar.translatesAutoresizingMaskIntoConstraints = false
         return topbar
     }()
-    
+    lazy var searchTextField: MDCFilledTextField = {
+        let textField = MDCFilledTextField()
+        let container = MDCContainerScheme()
+        textField.applyTheme(withScheme: container)
+        textField.label.text = "Search"
+     //   textField.delegate = self
+        textField.leftViewMode = .always
+        textField.setUnderlineColor(UIColor().hexStringToUIColor(hex: "#495057"), for: .editing)
+        textField.setFloatingLabelColor(UIColor().hexStringToUIColor(hex: "#495057"), for: .editing)
+        textField.setFilledBackgroundColor(.clear, for: .normal)
+        textField.setFilledBackgroundColor(.clear, for: .editing)
+        textField.leftView = UIImageView(image: #imageLiteral(resourceName: "search_x20").withRenderingMode(.alwaysTemplate))
+        textField.leftView?.tintColor = UIColor.darkGray.withAlphaComponent(0.87)
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.setContentHuggingPriority(.defaultLow, for: .horizontal)
+      
+        return textField
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
