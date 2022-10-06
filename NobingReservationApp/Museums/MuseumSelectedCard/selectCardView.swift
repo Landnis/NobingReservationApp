@@ -240,7 +240,6 @@ class selectCardView: UIViewController {
         closeButton.bottomAnchor.constraint(equalTo: selectedCard.topAnchor,constant: -20).isActive = true
         closeButton.trailingAnchor.constraint(equalTo: selectedCard.trailingAnchor).isActive = true
         
-        
         collectionView?.topAnchor.constraint(equalTo: selectedCard.topAnchor).isActive = true
         collectionView?.leadingAnchor.constraint(equalTo: selectedCard.leadingAnchor).isActive = true
         collectionView?.trailingAnchor.constraint(equalTo: selectedCard.trailingAnchor).isActive = true

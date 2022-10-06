@@ -13,35 +13,32 @@ import MaterialComponents.MDCActionSheetController_MaterialTheming
 class MuseumViewController: UIViewController,AlertController{
 
     private var collectionView: UICollectionView?
+    var searchController = UISearchController(searchResultsController: nil)
     var refreshControl = UIRefreshControl()
-
+    var tableFilterData = [String]()
+    var isSearching = false
+    var searchedLocation = dataSet
+    
     var topbar: TopBarView = {
         let topbar = TopBarView()
         topbar.translatesAutoresizingMaskIntoConstraints = false
+        
         return topbar
     }()
-    lazy var searchTextField: MDCFilledTextField = {
-        let textField = MDCFilledTextField()
-        let container = MDCContainerScheme()
-        textField.applyTheme(withScheme: container)
-        textField.label.text = "Search"
-     //   textField.delegate = self
-        textField.leftViewMode = .always
-        textField.setUnderlineColor(UIColor().hexStringToUIColor(hex: "#495057"), for: .editing)
-        textField.setFloatingLabelColor(UIColor().hexStringToUIColor(hex: "#495057"), for: .editing)
-        textField.setFilledBackgroundColor(.clear, for: .normal)
-        textField.setFilledBackgroundColor(.clear, for: .editing)
-        textField.leftView = UIImageView(image: #imageLiteral(resourceName: "search_x20").withRenderingMode(.alwaysTemplate))
-        textField.leftView?.tintColor = UIColor.darkGray.withAlphaComponent(0.87)
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.setContentHuggingPriority(.defaultLow, for: .horizontal)
-      
-        return textField
+    
+    var searchBarView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        return view
     }()
-
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         topbar.delegate = self
+       
         view.backgroundColor = UIColor().hexStringToUIColor(hex: "#f5ebe0")
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -59,9 +56,12 @@ class MuseumViewController: UIViewController,AlertController{
         collectionView.frame = view.bounds
         self.view.addSubview(collectionView)
         view.addSubview(topbar)
+        view.addSubview(searchBarView)
+        searchBarView.addSubview(searchController.searchBar)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
         collectionView.addSubview(refreshControl)
+        configureSearchController()
         topbarConstraints()
     }
     
@@ -72,6 +72,19 @@ class MuseumViewController: UIViewController,AlertController{
         }
     }
     
+    private func configureSearchController(){
+        searchController.loadViewIfNeeded()
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.enablesReturnKeyAutomatically = false
+        searchController.searchBar.returnKeyType = UIReturnKeyType.done
+        self.navigationItem.searchController = searchController
+        self.navigationItem.hidesSearchBarWhenScrolling = false
+        definesPresentationContext = true
+        searchController.searchBar.placeholder = "Search Museums By Location"
+    }
+    
     func topbarConstraints(){
         topbar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         topbar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -79,31 +92,44 @@ class MuseumViewController: UIViewController,AlertController{
         //topbar.widthAnchor.constraint(equalToConstant: 50).isActive = true
         topbar.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
-        collectionView?.topAnchor.constraint(equalTo: topbar.bottomAnchor).isActive = true
+        searchBarView.topAnchor.constraint(equalTo: topbar.bottomAnchor,constant: 15).isActive = true
+        searchBarView.widthAnchor.constraint(equalToConstant: view.frame.size.width).isActive = true
+        
+        collectionView?.topAnchor.constraint(equalTo: searchBarView.bottomAnchor,constant: 15).isActive = true
         collectionView?.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         collectionView?.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         collectionView?.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
-   
-    
-    
-
 }
-extension MuseumViewController: UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout {
+extension MuseumViewController: UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout, UISearchResultsUpdating,UISearchControllerDelegate,UISearchBarDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSet.count
+        if isSearching {
+            return searchedLocation.count
+        } else {
+            return dataSet.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! MuseumsCardView
         let Museums = dataSet
-        cell.configure(label: "\(Museums[indexPath.row].title!)")
-        cell.configure(with: Museums[indexPath.row].image!)
-        cell.configure(phoneLabel: ": "+Museums[indexPath.row].phone!)
-        cell.configure(labelSub:  ": "+Museums[indexPath.row].address!)
-        cell.configure(priceL: Museums[indexPath.row].price! )
-        cell.layer.cornerRadius = 15
-        cell.delegate = self
+        if isSearching {
+            cell.configure(label: "\(self.searchedLocation[indexPath.row].title!)")
+            cell.configure(with: self.searchedLocation[indexPath.row].image!)
+            cell.configure(phoneLabel: ": "+self.searchedLocation[indexPath.row].phone!)
+            cell.configure(labelSub:  ": "+self.searchedLocation[indexPath.row].address!)
+            cell.configure(priceL: self.searchedLocation[indexPath.row].price! )
+            cell.layer.cornerRadius = 15
+            cell.delegate = self
+        } else {
+            cell.configure(label: "\(Museums[indexPath.row].title!)")
+            cell.configure(with: Museums[indexPath.row].image!)
+            cell.configure(phoneLabel: ": "+Museums[indexPath.row].phone!)
+            cell.configure(labelSub:  ": "+Museums[indexPath.row].address!)
+            cell.configure(priceL: Museums[indexPath.row].price! )
+            cell.layer.cornerRadius = 15
+            cell.delegate = self
+        }
         return cell
     }
     
@@ -113,17 +139,54 @@ extension MuseumViewController: UICollectionViewDataSource,UICollectionViewDeleg
         let vc = selectCardView()
         self.navigationController?.pushViewController(selectCardView(), animated: true)
         self.modalPresentationStyle = .formSheet
-        vc.museum_title = Museums[indexPath.item].title!
-        vc.img.image = Museums[indexPath.item].image!
-        //vc.img.image = Hotels[indexPath.row].images!
-        vc.address_title = ": "+Museums[indexPath.item].address!
-        vc.phone_label = ": "+Museums[indexPath.item].phone!
-        vc.price_label = ": \(Museums[indexPath.item].price!)€ per day"
-        present(vc, animated: true)
+        searchController.searchBar.searchTextField.text = ""
+        searchController.searchBar.resignFirstResponder()
+        if isSearching {
+            vc.museum_title = searchedLocation[indexPath.item].title!
+            vc.img.image = searchedLocation[indexPath.item].image!
+            //vc.img.image = Hotels[indexPath.row].images!
+            vc.address_title = ": "+searchedLocation[indexPath.item].address!
+            vc.phone_label = ": "+searchedLocation[indexPath.item].phone!
+            vc.price_label = ": \(searchedLocation[indexPath.item].price!)€ per day"
+            present(vc, animated: true)
+        }else {
+            vc.museum_title = Museums[indexPath.item].title!
+            vc.img.image = Museums[indexPath.item].image!
+            //vc.img.image = Hotels[indexPath.row].images!
+            vc.address_title = ": "+Museums[indexPath.item].address!
+            vc.phone_label = ": "+Museums[indexPath.item].phone!
+            vc.price_label = ": \(Museums[indexPath.item].price!)€ per day"
+            present(vc, animated: true)
+        }
+       
     }
-  
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchText = searchController.searchBar.text!
+        if !searchText.isEmpty {
+            isSearching = true
+            searchedLocation.removeAll()
+            for location in dataSet{
+                if location.location!.lowercased().contains(searchText.lowercased())
+                {
+                        self.searchedLocation.append(location)
+                        print(searchedLocation)
+                }
+            }
+        }else{
+            isSearching = false
+            searchedLocation.removeAll()
+            searchedLocation = dataSet
+        }
+        self.collectionView!.reloadData()
+            
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar){
+        isSearching = false
+        searchedLocation.removeAll()
+        collectionView!.reloadData()
+    }
 }
-
 extension MuseumViewController: TopBarViewDelegate {
     func tappedMenu() {
         print("Hello")
@@ -156,6 +219,5 @@ extension MuseumViewController:MuseumCardDelegate {
         vc.price_label = ": \(price)€ per day"
         present(vc, animated: true)
     }
-    
- 
 }
+

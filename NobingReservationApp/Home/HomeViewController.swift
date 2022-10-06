@@ -10,23 +10,23 @@ import SideMenu
 import MaterialComponents.MDCActionSheetController
 import MaterialComponents.MDCActionSheetController_MaterialTheming
 
-
-struct Responsed: Codable {
-    let results: MyResults
-    let status: String
-}
-struct MyResults: Codable {
-   let sunrise:String
-   let sunset:String
-   let solar_noon:String
-   let day_length:Int
-   let civil_twilight_begin:String
-   let civil_twilight_end:String
-   let nautical_twilight_begin:String
-   let nautical_twilight_end:String
-   let astronomical_twilight_begin:String
-   let astronomical_twilight_end:String
-}
+/// Data Model for api
+//struct Responsed: Codable {
+//    let results: MyResults
+//    let status: String
+//}
+//struct MyResults: Codable {
+//   let sunrise:String
+//   let sunset:String
+//   let solar_noon:String
+//   let day_length:Int
+//   let civil_twilight_begin:String
+//   let civil_twilight_end:String
+//   let nautical_twilight_begin:String
+//   let nautical_twilight_end:String
+//   let astronomical_twilight_begin:String
+//   let astronomical_twilight_end:String
+//}
 
 class HomeViewController: UIViewController{
     
@@ -71,32 +71,32 @@ class HomeViewController: UIViewController{
              self.collectionView?.refreshControl?.endRefreshing()
          }
      }
-     
-     private func fetchData(){
-
-         let url = URL(string:"https://api.sunrise-sunset.org/json?lat=36.7201600&lng=-4.4203400&formatted=0")!
-         let task = URLSession.shared.dataTask(with: url)
-         { (data, resp, error) in
-
-             guard let data = data else {
-                 print("data is nil")
-                 return
-             }
-             
-             guard let result = try? JSONDecoder().decode(Responsed.self, from: data)else {
-                 print("couldn't")
-                 return
-             }
-             self.dataGet.append(result.results.sunrise)
-             self.dataGet.append(result.results.civil_twilight_begin)
-             self.dataGet.append(result.results.sunset)
-             self.dataGet.append(result.results.civil_twilight_end)
-             DispatchQueue.main.async {
-                 self.collectionView?.reloadData()
-             }
-         }
-         task.resume()
-     }
+     ///  Store the api for weather data
+//     private func fetchData(){
+//
+//         let url = URL(string:"https://api.sunrise-sunset.org/json?lat=36.7201600&lng=-4.4203400&formatted=0")!
+//         let task = URLSession.shared.dataTask(with: url)
+//         { (data, resp, error) in
+//
+//             guard let data = data else {
+//                 print("data is nil")
+//                 return
+//             }
+//
+//             guard let result = try? JSONDecoder().decode(Responsed.self, from: data)else {
+//                 print("couldn't")
+//                 return
+//             }
+//             self.dataGet.append(result.results.sunrise)
+//             self.dataGet.append(result.results.civil_twilight_begin)
+//             self.dataGet.append(result.results.sunset)
+//             self.dataGet.append(result.results.civil_twilight_end)
+//             DispatchQueue.main.async {
+//                 self.collectionView?.reloadData()
+//             }
+//         }
+//         task.resume()
+//     }
     
  
     

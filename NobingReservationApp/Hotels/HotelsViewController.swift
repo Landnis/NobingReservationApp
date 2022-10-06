@@ -13,12 +13,24 @@ class HotelsViewController: UIViewController,AlertController {
     
     private var collectionView: UICollectionView?
     var refreshControl = UIRefreshControl()
-
+    var searchController = UISearchController(searchResultsController: nil)
+    var tableFilterData = [String]()
+    var isSearching = false
+    var searchedLocation = hotelData
+    
     lazy var topbar: TopBarView = {
          let topbar = TopBarView()
          topbar.translatesAutoresizingMaskIntoConstraints = false
          return topbar
      }()
+    var searchBarView: UIView = {
+        let view = UIView(frame:.zero)
+        view.backgroundColor = .clear
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        return view
+    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,10 +52,13 @@ class HotelsViewController: UIViewController,AlertController {
         collectionView.frame = view.bounds
         self.view.addSubview(collectionView)
         view.addSubview(topbar)
+        view.addSubview(searchBarView)
+        searchBarView.addSubview(searchController.searchBar)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
         collectionView.addSubview(refreshControl)
         constraint()
+        configureSearchController()
     }
     
     @objc func refresh(send: UIRefreshControl){
@@ -52,6 +67,18 @@ class HotelsViewController: UIViewController,AlertController {
             self.refreshControl.endRefreshing()
         }
     }
+    private func configureSearchController(){
+        searchController.loadViewIfNeeded()
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.enablesReturnKeyAutomatically = false
+        searchController.searchBar.returnKeyType = UIReturnKeyType.done
+        self.navigationItem.searchController = searchController
+        self.navigationItem.hidesSearchBarWhenScrolling = false
+        definesPresentationContext = true
+        searchController.searchBar.placeholder = "Search Museums By Location"
+    }
     
     func constraint(){
       topbar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -59,7 +86,10 @@ class HotelsViewController: UIViewController,AlertController {
       topbar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
       topbar.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
-      collectionView?.topAnchor.constraint(equalTo: topbar.bottomAnchor).isActive = true
+        searchBarView.topAnchor.constraint(equalTo: topbar.bottomAnchor,constant: 15).isActive = true
+        searchBarView.widthAnchor.constraint(equalToConstant: view.frame.size.width).isActive = true
+        
+        collectionView?.topAnchor.constraint(equalTo: searchBarView.bottomAnchor,constant: 15).isActive = true
       collectionView?.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
       collectionView?.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
       collectionView?.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
@@ -67,21 +97,36 @@ class HotelsViewController: UIViewController,AlertController {
     
 }
 
-extension HotelsViewController: UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout {
+extension HotelsViewController: UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UISearchResultsUpdating,UISearchControllerDelegate,UISearchBarDelegate  {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return hotelData.count
+        if isSearching {
+            return searchedLocation.count
+        } else {
+            return hotelData.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! HotelCardsView
         let Museums = hotelData
-        cell.configure(label: "\(Museums[indexPath.row].title!)")
-        cell.configure(with: Museums[indexPath.row].image!)
-        cell.configure(phoneLabel: ": "+Museums[indexPath.row].phone!)
-        cell.configure(labelSub:  ": "+Museums[indexPath.row].subTitle!)
-        cell.configure(priceL: Museums[indexPath.row].price! )
-        cell.layer.cornerRadius = 15
-        cell.delegate = self
+        if isSearching{
+            cell.configure(label: "\(self.searchedLocation[indexPath.row].title!)")
+            cell.configure(with: self.searchedLocation[indexPath.row].image!)
+            cell.configure(phoneLabel: ": "+self.searchedLocation[indexPath.row].phone!)
+            cell.configure(labelSub:  ": "+self.searchedLocation[indexPath.row].subTitle!)
+            cell.configure(priceL: self.searchedLocation[indexPath.row].price! )
+            cell.layer.cornerRadius = 15
+            cell.delegate = self
+        }else {
+            cell.configure(label: "\(Museums[indexPath.row].title!)")
+            cell.configure(with: Museums[indexPath.row].image!)
+            cell.configure(phoneLabel: ": "+Museums[indexPath.row].phone!)
+            cell.configure(labelSub:  ": "+Museums[indexPath.row].subTitle!)
+            cell.configure(priceL: Museums[indexPath.row].price! )
+            cell.layer.cornerRadius = 15
+            cell.delegate = self
+        }
+        
         return cell
     }
     
@@ -91,13 +136,50 @@ extension HotelsViewController: UICollectionViewDataSource,UICollectionViewDeleg
         let vc = HotelSelectedViewController()
         self.navigationController?.pushViewController(HotelSelectedViewController(), animated: true)
         self.modalPresentationStyle = .formSheet
-        vc.hotel_title = Hotels[indexPath.item].title!
-        vc.img.image = Hotels[indexPath.item].image!
-        //vc.img.image = Hotels[indexPath.row].images!
-        vc.address_title = ": "+Hotels[indexPath.item].subTitle!
-        vc.phone_label = ": "+Hotels[indexPath.item].phone!
-        vc.price_label = ": \(Hotels[indexPath.item].price!)€ per day"
-        present(vc, animated: true)
+        searchController.searchBar.searchTextField.text = ""
+        searchController.searchBar.resignFirstResponder()
+        if isSearching {
+            vc.hotel_title = self.searchedLocation[indexPath.item].title!
+            vc.img.image = Hotels[indexPath.item].image!
+            //vc.img.image = Hotels[indexPath.row].images!
+            vc.address_title = ": "+self.searchedLocation[indexPath.item].subTitle!
+            vc.phone_label = ": "+self.searchedLocation[indexPath.item].phone!
+            vc.price_label = ": \(self.searchedLocation[indexPath.item].price!)€ per day"
+            present(vc, animated: true)
+        }else {
+            vc.hotel_title = Hotels[indexPath.item].title!
+            vc.img.image = Hotels[indexPath.item].image!
+            //vc.img.image = Hotels[indexPath.row].images!
+            vc.address_title = ": "+Hotels[indexPath.item].subTitle!
+            vc.phone_label = ": "+Hotels[indexPath.item].phone!
+            vc.price_label = ": \(Hotels[indexPath.item].price!)€ per day"
+            present(vc, animated: true)
+        }
+    }
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchText = searchController.searchBar.text!
+        if !searchText.isEmpty {
+            isSearching = true
+            searchedLocation.removeAll()
+            for location in hotelData{
+                if location.location!.lowercased().contains(searchText.lowercased())
+                {
+                        self.searchedLocation.append(location)
+                        print(searchedLocation)
+                }
+            }
+        }else{
+            isSearching = false
+            searchedLocation.removeAll()
+            searchedLocation = hotelData
+        }
+        self.collectionView!.reloadData()
+            
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar){
+        isSearching = false
+        searchedLocation.removeAll()
+        collectionView!.reloadData()
     }
   
 }
