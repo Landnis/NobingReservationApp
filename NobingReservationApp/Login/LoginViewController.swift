@@ -129,9 +129,9 @@ extension LoginViewController : LoginViewDelegate {
     }
     
     func didTappedForgotButton() {
-        let viewController = ForgotPasswordViewController()
-        viewController.modalTransitionStyle = .crossDissolve
-        viewController.modalPresentationStyle = .formSheet
+        let viewController = SearchBarView()
+        viewController.modalTransitionStyle = .coverVertical
+        viewController.modalPresentationStyle = .fullScreen
         self.present(viewController, animated: true)
     }
 }

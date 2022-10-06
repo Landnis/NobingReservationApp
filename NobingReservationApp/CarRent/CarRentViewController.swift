@@ -13,11 +13,14 @@ class CarRentViewController: UIViewController {
 
     private var collectionView: UICollectionView?
     var refreshControl = UIRefreshControl()
-
+    var searchController = UISearchController(searchResultsController: nil)
+    var tableFilterData = [String]()
+    var isSearching = false
+    var searchedLocation = carRentalData
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = UIColor().hexStringToUIColor(hex: "#f5ebe0")
         view.addSubview(topbar)
         topbar.delegate = self
         let layout = UICollectionViewFlowLayout()
@@ -35,11 +38,13 @@ class CarRentViewController: UIViewController {
         collectionView.backgroundColor = UIColor().hexStringToUIColor(hex: "#f5ebe0")
         collectionView.frame = view.bounds
         self.view.addSubview(collectionView)
+        view.addSubview(searchBarView)
+        searchBarView.addSubview(searchController.searchBar)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
         collectionView.addSubview(refreshControl)
         constraint()
-       
+        configureSearchController()
     }
     
     @objc func refresh(send: UIRefreshControl){
@@ -54,13 +59,37 @@ class CarRentViewController: UIViewController {
          topbar.translatesAutoresizingMaskIntoConstraints = false
          return topbar
      }()
+    var searchBarView: UIView = {
+        let view = UIView(frame:.zero)
+        view.backgroundColor = .clear
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        return view
+    }()
+    
+    private func configureSearchController(){
+        searchController.loadViewIfNeeded()
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.enablesReturnKeyAutomatically = false
+        searchController.searchBar.returnKeyType = UIReturnKeyType.done
+        self.navigationItem.searchController = searchController
+        self.navigationItem.hidesSearchBarWhenScrolling = false
+        definesPresentationContext = true
+        searchController.searchBar.placeholder = "Search Museums By Location"
+    }
+    
     func constraint(){
       topbar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
       topbar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
       topbar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
       topbar.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
-      collectionView?.topAnchor.constraint(equalTo: topbar.bottomAnchor).isActive = true
+        searchBarView.topAnchor.constraint(equalTo: topbar.bottomAnchor,constant: 15).isActive = true
+        searchBarView.widthAnchor.constraint(equalToConstant: view.frame.size.width).isActive = true
+        
+      collectionView?.topAnchor.constraint(equalTo: searchBarView.bottomAnchor,constant: 15).isActive = true
       collectionView?.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
       collectionView?.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
       collectionView?.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
@@ -87,21 +116,36 @@ extension CarRentViewController :TopBarViewDelegate {
     }
 }
 
-extension CarRentViewController: UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout {
+extension CarRentViewController: UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UISearchResultsUpdating,UISearchControllerDelegate,UISearchBarDelegate  {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return carRentalData.count
+        if isSearching {
+            return searchedLocation.count
+        } else {
+            return carRentalData.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CarRentCardsView
         let CarRental = carRentalData
-        cell.configure(label: "\(CarRental[indexPath.row].title!)")
-        cell.configure(with: CarRental[indexPath.row].image!)
-        cell.configure(phoneLabel: ": "+CarRental[indexPath.row].phone!)
-        cell.configure(labelSub:  ": "+CarRental[indexPath.row].address!)
-        cell.configure(priceL: CarRental[indexPath.row].price! )
-        cell.layer.cornerRadius = 15
-        cell.delegate = self
+        if isSearching{
+            cell.configure(label: "\(self.searchedLocation[indexPath.row].title!)")
+            cell.configure(with: self.searchedLocation[indexPath.row].image!)
+            cell.configure(phoneLabel: ": "+self.searchedLocation[indexPath.row].phone!)
+            cell.configure(labelSub:  ": "+self.searchedLocation[indexPath.row].address!)
+            cell.configure(priceL: self.searchedLocation[indexPath.row].price! )
+            cell.layer.cornerRadius = 15
+            cell.delegate = self
+        }else {
+            cell.configure(label: "\(CarRental[indexPath.row].title!)")
+            cell.configure(with: CarRental[indexPath.row].image!)
+            cell.configure(phoneLabel: ": "+CarRental[indexPath.row].phone!)
+            cell.configure(labelSub:  ": "+CarRental[indexPath.row].address!)
+            cell.configure(priceL: CarRental[indexPath.row].price! )
+            cell.layer.cornerRadius = 15
+            cell.delegate = self
+        }
+
         return cell
     }
     
@@ -111,13 +155,50 @@ extension CarRentViewController: UICollectionViewDataSource,UICollectionViewDele
         let vc = CarRentSelectedViewController()
         self.navigationController?.pushViewController(CarRentSelectedViewController(), animated: true)
         self.modalPresentationStyle = .formSheet
-        vc.carRent_title = CarRental[indexPath.item].title!
-        vc.img.image = CarRental[indexPath.item].image!
-        //vc.img.image = Hotels[indexPath.row].images!
-        vc.address_title = ": "+CarRental[indexPath.item].address!
-        vc.phone_label = ": "+CarRental[indexPath.item].phone!
-        vc.price_label = ": \(CarRental[indexPath.item].price!)€ per day"
-        present(vc, animated: true)
+        searchController.searchBar.searchTextField.text = ""
+        searchController.searchBar.resignFirstResponder()
+        if isSearching{
+            vc.carRent_title = searchedLocation[indexPath.item].title!
+            vc.img.image = CarRental[indexPath.item].image!
+            //vc.img.image = Hotels[indexPath.row].images!
+            vc.address_title = ": "+searchedLocation[indexPath.item].address!
+            vc.phone_label = ": "+searchedLocation[indexPath.item].phone!
+            vc.price_label = ": \(searchedLocation[indexPath.item].price!)€ per day"
+            present(vc, animated: true)
+        }else{
+            vc.carRent_title = CarRental[indexPath.item].title!
+            vc.img.image = CarRental[indexPath.item].image!
+            //vc.img.image = Hotels[indexPath.row].images!
+            vc.address_title = ": "+CarRental[indexPath.item].address!
+            vc.phone_label = ": "+CarRental[indexPath.item].phone!
+            vc.price_label = ": \(CarRental[indexPath.item].price!)€ per day"
+            present(vc, animated: true)
+        }
+    }
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchText = searchController.searchBar.text!
+        if !searchText.isEmpty {
+            isSearching = true
+            searchedLocation.removeAll()
+            for location in carRentalData{
+                if location.location!.lowercased().contains(searchText.lowercased())
+                {
+                        self.searchedLocation.append(location)
+                        print(searchedLocation)
+                }
+            }
+        }else{
+            isSearching = false
+            searchedLocation.removeAll()
+            searchedLocation = carRentalData
+        }
+        self.collectionView!.reloadData()
+            
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar){
+        isSearching = false
+        searchedLocation.removeAll()
+        collectionView!.reloadData()
     }
   
 }

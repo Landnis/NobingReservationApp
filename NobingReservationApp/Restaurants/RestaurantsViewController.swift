@@ -14,12 +14,25 @@ class RestaurantsViewController: UIViewController,AlertController{
 
     private var collectionView: UICollectionView?
     var refreshControl = UIRefreshControl()
+    var searchController = UISearchController(searchResultsController: nil)
+    var tableFilterData = [String]()
+    var isSearching = false
+    var searchedLocation = restaurantData
     
     lazy var topbar: TopBarView = {
          let topbar = TopBarView()
          topbar.translatesAutoresizingMaskIntoConstraints = false
          return topbar
      }()
+    
+    var searchBarView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         topbar.delegate = self
@@ -40,11 +53,14 @@ class RestaurantsViewController: UIViewController,AlertController{
         collectionView.frame = view.bounds
         self.view.addSubview(collectionView)
         view.addSubview(topbar)
+        view.addSubview(searchBarView)
+        searchBarView.addSubview(searchController.searchBar)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
         collectionView.addSubview(refreshControl)
         constraint()
+        configureSearchController()
     }
     
     @objc func refresh(send: UIRefreshControl){
@@ -54,13 +70,29 @@ class RestaurantsViewController: UIViewController,AlertController{
         }
     }
     
+    private func configureSearchController(){
+        searchController.loadViewIfNeeded()
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.enablesReturnKeyAutomatically = false
+        searchController.searchBar.returnKeyType = UIReturnKeyType.done
+        self.navigationItem.searchController = searchController
+        self.navigationItem.hidesSearchBarWhenScrolling = false
+        definesPresentationContext = true
+        searchController.searchBar.placeholder = "Search Museums By Location"
+    }
+    
     func constraint(){
       topbar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
       topbar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
       topbar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
       topbar.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
-      collectionView?.topAnchor.constraint(equalTo: topbar.bottomAnchor).isActive = true
+        searchBarView.topAnchor.constraint(equalTo: topbar.bottomAnchor,constant: 15).isActive = true
+        searchBarView.widthAnchor.constraint(equalToConstant: view.frame.size.width).isActive = true
+        
+      collectionView?.topAnchor.constraint(equalTo: searchBarView.bottomAnchor,constant: 15).isActive = true
       collectionView?.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
       collectionView?.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
       collectionView?.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
@@ -69,14 +101,27 @@ class RestaurantsViewController: UIViewController,AlertController{
 
 }
 
-extension RestaurantsViewController: UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout {
+extension RestaurantsViewController: UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UISearchResultsUpdating,UISearchControllerDelegate,UISearchBarDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return restaurantData.count
+        if isSearching {
+            return searchedLocation.count
+        } else {
+            return restaurantData.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! RestaurantCardsView
         let Restaurants = restaurantData
+        if isSearching {
+            cell.configure(label: "\(self.searchedLocation[indexPath.row].title!)")
+            cell.configure(with: self.searchedLocation[indexPath.row].image!)
+            cell.configure(phoneLabel: ": "+self.searchedLocation[indexPath.row].phone!)
+            cell.configure(labelSub:  ": "+self.searchedLocation[indexPath.row].address!)
+            cell.configure(priceL: self.searchedLocation[indexPath.row].price! )
+            cell.layer.cornerRadius = 15
+            cell.delegate = self
+        } else {
         cell.configure(label: "\(Restaurants[indexPath.row].title!)")
         cell.configure(with: Restaurants[indexPath.row].image!)
         cell.configure(phoneLabel: ": "+Restaurants[indexPath.row].phone!)
@@ -84,6 +129,7 @@ extension RestaurantsViewController: UICollectionViewDataSource,UICollectionView
         cell.configure(priceL: Restaurants[indexPath.row].price! )
         cell.layer.cornerRadius = 15
         cell.delegate = self
+        }
         return cell
     }
     
@@ -93,6 +139,17 @@ extension RestaurantsViewController: UICollectionViewDataSource,UICollectionView
         let vc = RestaurantSelectedViewController()
         self.navigationController?.pushViewController(RestaurantSelectedViewController(), animated: true)
         self.modalPresentationStyle = .formSheet
+        searchController.searchBar.searchTextField.text = ""
+        searchController.searchBar.resignFirstResponder()
+        if isSearching {
+            vc.restaurant_title = searchedLocation[indexPath.item].title!
+            vc.img.image = Restaurants[indexPath.item].image!
+            //vc.img.image = Hotels[indexPath.row].images!
+            vc.address_title = ": "+searchedLocation[indexPath.item].address!
+            vc.phone_label = ": "+searchedLocation[indexPath.item].phone!
+            vc.price_label = ": \(searchedLocation[indexPath.item].price!)€ per person"
+            present(vc, animated: true)
+        }else{
         vc.restaurant_title = Restaurants[indexPath.item].title!
         vc.img.image = Restaurants[indexPath.item].image!
         //vc.img.image = Hotels[indexPath.row].images!
@@ -100,6 +157,32 @@ extension RestaurantsViewController: UICollectionViewDataSource,UICollectionView
         vc.phone_label = ": "+Restaurants[indexPath.item].phone!
         vc.price_label = ": \(Restaurants[indexPath.item].price!)€ per person"
         present(vc, animated: true)
+        }
+    }
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchText = searchController.searchBar.text!
+        if !searchText.isEmpty {
+            isSearching = true
+            searchedLocation.removeAll()
+            for location in restaurantData{
+                if location.location!.lowercased().contains(searchText.lowercased())
+                {
+                        self.searchedLocation.append(location)
+                        print(searchedLocation)
+                }
+            }
+        }else{
+            isSearching = false
+            searchedLocation.removeAll()
+            searchedLocation = restaurantData
+        }
+        self.collectionView!.reloadData()
+            
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar){
+        isSearching = false
+        searchedLocation.removeAll()
+        collectionView!.reloadData()
     }
   
 }
